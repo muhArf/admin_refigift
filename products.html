@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products | Refi Gift</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Styling untuk tombol Edit dan Delete */
+    .btn-edit, .btn-delete {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      display: inline-block;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-edit {
+      background-color: #4CAF50; /* Green */
+      color: white;
+    }
+
+    .btn-delete {
+      background-color: #FF5733; /* Red */
+      color: white;
+    }
+
+    /* Efek saat hover */
+    .btn-edit:hover {
+      background-color: #45a049;
+    }
+
+    .btn-delete:hover {
+      background-color: #e64a19;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside>
+      <div class="top">
+        <div class="logo">
+          <img src="./images/logo.jpg" />
+          <h2>REFIGIFT</h2>
+        </div>
+      </div>
+      <div class="sidebar">
+        <a href="index.html">
+          <span class="material-icons-sharp">grid_view</span>
+          <h3>Dashboard</h3>
+        </a>
+        <a href="orders.html">
+          <span class="material-icons-sharp">receipt_long</span>
+          <h3>Orders</h3>
+        </a>
+        <a href="products.html" class="active">
+          <span class="material-icons-sharp">inventory</span>
+          <h3>Products</h3>
+        </a>
+        <a href="logout.html">
+          <span class="material-icons-sharp">logout</span>
+          <h3>Logout</h3>
+        </a>
+      </div>
+    </aside>
+
+    <main>
+      <h1>Products</h1>
+      <button class="btn-add-product" onclick="document.getElementById('productModal').style.display='block'">
+        + Tambah Produk
+      </button>
+
+      <div class="product-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Gambar</th>
+              <th>Nama Produk</th>
+              <th>Harga</th>
+              <th>Stok</th>
+              <th>Kategori</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><img src="./images/sample1.jpg" class="product-img" /></td>
+              <td>Gift Box Aesthetic</td>
+              <td>Rp75.000</td>
+              <td>12</td>
+              <td>Hadiah</td>
+              <td>
+                <button class="btn-edit" onclick="openEditModal()">Edit</button>
+                <button class="btn-delete">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td><img src="./images/sample2.jpg" class="product-img" /></td>
+              <td>Souvenir Pernikahan</td>
+              <td>Rp15.000</td>
+              <td>50</td>
+              <td>Souvenir</td>
+              <td>
+                <button class="btn-edit" onclick="openEditModal()">Edit</button>
+                <button class="btn-delete">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Modal Tambah Produk -->
+    <div id="productModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('productModal').style.display='none'">&times;</span>
+        <h2>Add Product</h2>
+        <form>
+          <label>Nama Produk:</label>
+          <input type="text" placeholder="Nama produk" required />
+          <label>Harga:</label>
+          <input type="number" placeholder="Harga produk" required />
+          <label>Stok:</label>
+          <input type="number" placeholder="Jumlah stok" required />
+          <label>Kategori:</label>
+          <input type="text" placeholder="Kategori produk" required />
+          <label>Gambar:</label>
+          <input type="file" accept="image/*" />
+          <button type="submit" class="btn-submit">Simpan</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Fungsi untuk membuka modal edit saat tombol edit ditekan
+    function openEditModal() {
+      const modal = document.getElementById("productModal");
+      modal.style.display = "block";
+      // Opsional: menambahkan data produk ke dalam form modal untuk editing
+    }
+
+    // Tutup modal saat klik di luar modal
+    window.onclick = function(event) {
+      const modal = document.getElementById("productModal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+  </script>
+</body>
+</html>

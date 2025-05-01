@@ -3,68 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Website | Refi Gift</title>
-    <!-- MATERIAL ICON-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
-    rel="stylesheet">
-    <!-- STYLESHEET -->
-    <link rel="stylesheet" href="./style.css">
+    <title>Dashboard | Refi Gift</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">  
+    <div class="container">
         <aside>
             <div class="top">
                 <div class="logo">
                     <img src="./images/logo.jpg">
-                    <h2>ADMIN | REFIGIFT</h2>
-                </div>
-                <div class="close" id="close-btn">
-                    <span class="material-icons-sharp">close</span>
+                    <h2>REFIGIFT</h2>
                 </div>
             </div>
-
             <div class="sidebar">
-                <a href="#">
+                <a href="index.html" class="active">
                     <span class="material-icons-sharp">grid_view</span>
                     <h3>Dashboard</h3>
                 </a>
-                <a href="#" class="active"> 
-                    <span class="material-icons-sharp">person_outline</span>
-                    <h3>Customers</h3>
-                </a>
-                <a href="#">
+                <a href="orders.html">
                     <span class="material-icons-sharp">receipt_long</span>
-                    <h3>Order</h3>
+                    <h3>Orders</h3>
                 </a>
-                <a href="#">
+                <a href="products.html">
                     <span class="material-icons-sharp">inventory</span>
                     <h3>Products</h3>
                 </a>
-                <a href="#">
+                <a href="javascript:void(0);" id="logout">
                     <span class="material-icons-sharp">logout</span>
                     <h3>Logout</h3>
                 </a>
             </div>
         </aside>
-        <!--------------- END OF ASIDE -------------------->
+
         <main>
             <h1>Dashboard</h1>
-
+            <!-- Dashboard Content -->
             <div class="date">
                 <input type="date">
             </div>
+            <ul class="box-info">
+                <li>
+                    <i class='bx bxs-calendar-check'></i>
+                    <span class="text">
+                        <h3>1020</h3>
+                        <p>New Order</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>2834</h3>
+                        <p>Visitors</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-dollar-circle'></i>
+                    <span class="text">
+                        <h3>$2543</h3>
+                        <p>Total Sales</p>
+                    </span>
+                </li>
+            </ul>
 
-            <div class="insigth">
-                <div class="sales">
-                    <span class="material-symbols-outlined">analytics</span>
-
-                </div>
+            <div class="recent-orders">
+                <h2>Recent Orders</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Products Name</th>
+                            <th>Products Number</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Figuran samping</td>
+                            <td>E123</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                        <tr>
+                            <td>Figuran samping</td>
+                            <td>E123</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                        <tr>
+                            <td>Figuran samping</td>
+                            <td>E123</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                        <tr>
+                            <td>Figuran samping</td>
+                            <td>E123</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="#">Show All</a>
             </div>
         </main>
-    
+    </div>
+
+    <!-- Logout Script -->
+    <script>
+        document.getElementById('logout').addEventListener('click', function() {
+            // Hapus data sesi pengguna (misalnya status login)
+            localStorage.removeItem('isLoggedIn'); // atau sessionStorage.removeItem('isLoggedIn');
+            // Redirect ke halaman login
+            window.location.href = 'login.html';  // Ganti dengan URL halaman login Anda
+        });
+
+        // Cek jika user belum login, arahkan ke login page
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('isLoggedIn')) {
+                // Jika belum login, arahkan ke halaman login
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
 </body>
 </html>
-
-<!-- NGETESS AJAA YANGG-->
-
-<!-- cobaa lagii ajaa yaa niii-->

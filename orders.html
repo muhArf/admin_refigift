@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Orders | Refi Gift</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="top">
+        <div class="logo">
+          <img src="./images/logo.jpg" />
+          <h2>REFIGIFT</h2>
+        </div>
+      </div>
+      <div class="sidebar">
+        <a href="index.html">
+          <span class="material-icons-sharp">grid_view</span>
+          <h3>Dashboard</h3>
+        </a>
+        <a href="orders.html" class="active">
+          <span class="material-icons-sharp">receipt_long</span>
+          <h3>Orders</h3>
+        </a>
+        <a href="products.html">
+          <span class="material-icons-sharp">inventory</span>
+          <h3>Products</h3>
+        </a>
+        <a href="logout.html">
+          <span class="material-icons-sharp">logout</span>
+          <h3>Logout</h3>
+        </a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+      <h1>Orders</h1>
+
+      <!-- Tombol Tambah Order -->
+      <button class="btn-add-order" onclick="openOrderModal()">+ Add Order</button>
+
+      <section class="recent-orders">
+        <h2>Order List</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Product</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#1001</td>
+              <td>Rani Wijaya</td>
+              <td>Custom Gift Box</td>
+              <td><span class="success">Completed</span></td>
+              <td>2025-04-30</td>
+              <td>
+                <button class="primary">View</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#1002</td>
+              <td>Andi Saputra</td>
+              <td>Couple Mug</td>
+              <td><span class="warning">Pending</span></td>
+              <td>2025-04-29</td>
+              <td>
+                <button class="primary">View</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#1003</td>
+              <td>Siti Nurhaliza</td>
+              <td>Mini Dried Flower</td>
+              <td><span class="denger">Cancelled</span></td>
+              <td>2025-04-28</td>
+              <td>
+                <button class="primary">View</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal Form Tambah Order -->
+  <div class="modal" id="orderModal">
+    <div class="modal-content">
+      <h3>Add New Order</h3>
+      <form id="orderForm">
+        <input type="text" placeholder="Customer Name" required />
+        <input type="text" placeholder="Product Name" required />
+        <select required>
+          <option value="">Select Status</option>
+          <option value="Completed">Completed</option>
+          <option value="Pending">Pending</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <input type="date" required />
+        <div class="actions">
+          <button type="button" class="cancel" onclick="closeOrderModal()">Cancel</button>
+          <button type="submit" class="submit">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Style Tambahan -->
+  <style>
+    .btn-add-order {
+      background: var(--color-primary, #6C63FF);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 99;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal-content input,
+    .modal-content select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .modal-content .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+
+    .modal-content .cancel {
+      background: #ccc;
+    }
+
+    .modal-content .submit {
+      background: var(--color-primary, #6C63FF);
+      color: white;
+    }
+  </style>
+
+  <!-- Script Tambahan -->
+  <script>
+    function openOrderModal() {
+      document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderModal').style.display = 'none';
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      alert("Order berhasil ditambahkan!");
+      closeOrderModal();
+    });
+  </script>
+</body>
+</html>
