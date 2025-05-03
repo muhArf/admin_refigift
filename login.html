@@ -11,11 +11,12 @@
         /* Custom Styles for Login Page */
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            background: url('your-background-image.jpg') no-repeat center center fixed; /* Replace with your image URL */
+            background-size: cover;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            justify-content: flex-end; /* Aligns the login box to the right */
             align-items: center;
             height: 100vh;
         }
@@ -23,10 +24,11 @@
         .login-container {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
             width: 400px;
             padding: 40px;
             text-align: center;
+            margin-right: 50px; /* Adds space from the right edge */
         }
 
         .login-container h2 {
@@ -84,6 +86,23 @@
             color: #6a11cb;
         }
 
+        .admin-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .admin-link {
+            color: #2575fc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .admin-link:hover {
+            color: #6a11cb;
+        }
+
         .login-container .logo {
             font-size: 32px;
             font-weight: bold;
@@ -105,6 +124,11 @@
         </form>
 
         <a href="#" class="forgot-password">Forgot Password?</a>
+
+        <div class="admin-actions">
+            <a href="register-admin.html" class="admin-link">Register Admin</a>
+            <a href="add-admin.html" class="admin-link">Add Admin</a>
+        </div>
     </div>
 
     <script>
