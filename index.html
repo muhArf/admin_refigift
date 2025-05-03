@@ -13,7 +13,7 @@
         <aside>
             <div class="top">
                 <div class="logo">
-                    <img src="./images/logo.jpg">
+                    <img src="./images/logo.jpg" alt="Logo">
                     <h2>REFIGIFT</h2>
                 </div>
             </div>
@@ -39,7 +39,6 @@
 
         <main>
             <h1>Dashboard</h1>
-            <!-- Dashboard Content -->
             <div class="date">
                 <input type="date">
             </div>
@@ -85,32 +84,32 @@
                             <td>E123</td>
                             <td>Due</td>
                             <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
+                            <td class="primary"><button>Details</button></td>
                         </tr>
                         <tr>
                             <td>Figuran samping</td>
                             <td>E123</td>
                             <td>Due</td>
                             <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
+                            <td class="primary"><button>Details</button></td>
                         </tr>
                         <tr>
                             <td>Figuran samping</td>
                             <td>E123</td>
                             <td>Due</td>
                             <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
+                            <td class="primary"><button>Details</button></td>
                         </tr>
                         <tr>
                             <td>Figuran samping</td>
                             <td>E123</td>
                             <td>Due</td>
                             <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
+                            <td class="primary"><button>Details</button></td>
                         </tr>
                     </tbody>
                 </table>
-                <a href="#">Show All</a>
+                <a href="#" class="show-all">Show All</a>
             </div>
         </main>
     </div>
@@ -118,16 +117,12 @@
     <!-- Logout Script -->
     <script>
         document.getElementById('logout').addEventListener('click', function() {
-            // Hapus data sesi pengguna (misalnya status login)
-            localStorage.removeItem('isLoggedIn'); // atau sessionStorage.removeItem('isLoggedIn');
-            // Redirect ke halaman login
-            window.location.href = 'login.html';  // Ganti dengan URL halaman login Anda
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
         });
 
-        // Cek jika user belum login, arahkan ke login page
         document.addEventListener('DOMContentLoaded', function() {
             if (!localStorage.getItem('isLoggedIn')) {
-                // Jika belum login, arahkan ke halaman login
                 window.location.href = 'login.html';
             }
         });
