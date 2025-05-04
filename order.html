@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders | Refi Gift</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 14rem auto;
+      min-height: 100vh;
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 1rem; /* Consistent margin */
+    }
+
+    .breadcrumb a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .order-header h2 {
+      font-size: 24px; /* Consistent font size */
+      margin: 0;
+      color: #333; /* Consistent color */
+    }
+
+    .add-order-btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .add-order-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .styled-table th,
+    .styled-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .styled-table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+
+    .status {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .completed {
+      background-color: #d4edda;
+      color: #28a745;
+    }
+
+    .pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .cancelled {
+      background-color: #f8d7da;
+      color: #dc3545;
+    }
+
+    td a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    td a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Sidebar Section -->
+    <aside>
+      <div class="toggle">
+        <div class="logo">
+          <img src="images/logo.png" alt="Logo" />
+          <h2>Refi<span class="danger">Gift</span></h2>
+        </div>
+        <div class="close" id="close-btn">
+          <span class="material-icons-sharp">close</span>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <a href="index.html">
+          <span class="material-icons-sharp">dashboard</span>
+          <h3>Dashboard</h3>
+        </a>
+        <a href="order.html" class="active">
+          <span class="material-icons-sharp">receipt_long</span>
+          <h3>Orders</h3>
+        </a>
+        <a href="products.html">
+          <span class="material-icons-sharp">inventory</span>
+          <h3>Products</h3>
+        </a>
+        <a href="#">
+          <span class="material-icons-sharp">logout</span>
+          <h3>Logout</h3>
+        </a>
+      </div>
+    </aside>
+    <!-- End of Sidebar Section -->
+
+    <!-- Main Content -->
+    <main>
+      <!-- Order Management Header -->
+      <div class="order-header">
+        <h2>Order Management</h2>
+        <button class="add-order-btn" onclick="addOrder()">+ Tambah Pesanan</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="#">Home</a> &gt; <a href="#">Admin</a> &gt; <span>Orders</span>
+      </nav>
+
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Customer Name</th>
+            <th>Jumlah</th>
+            <th>Tanggal Order</th>
+            <th>Status Validasi</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="order-table-body">
+          <tr>
+            <td>1</td>
+            <td>Laptop Lenovo</td>
+            <td>3</td>
+            <td>2025-05-04</td>
+            <td><span class="status completed">Valid</span></td>
+            <td><a href="#">Detail</a></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Mouse Wireless</td>
+            <td>10</td>
+            <td>2025-05-02</td>
+            <td><span class="status pending">Invalid</span></td>
+            <td><a href="#">Detail</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+  <script>
+    function addOrder() {
+      alert("Form tambah pesanan akan ditambahkan di sini.");
+    }
+  </script>
+</body>
+
+</html>

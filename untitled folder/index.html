@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Refi Gift</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <img src="./images/logo.jpg" alt="Logo">
+                    <h2>REFIGIFT</h2>
+                </div>
+            </div>
+            <div class="sidebar">
+                <a href="index.html" class="active">
+                    <span class="material-icons-sharp">dashboard</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="orders.html">
+                    <span class="material-icons-sharp">orders</span>
+                    <h3>Orders</h3>
+                </a>
+                <a href="products.html">
+                    <span class="material-icons-sharp">products</span>
+                    <h3>Products</h3>
+                </a>
+                <a href="javascript:void(0);" id="logout">
+                    <span class="material-icons-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+        <main>
+            <h1>Dashboard</h1>
+            <div class="date">
+                <input type="date">
+            </div>
+            <ul class="box-info">
+                <li>
+                    <i class='bx bxs-calendar-check'></i>
+                    <span class="text">
+                        <h3>1020</h3>
+                        <p>New Order</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>2834</h3>
+                        <p>Visitors</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-dollar-circle'></i>
+                    <span class="text">
+                        <h3>$2543</h3>
+                        <p>Total Sales</p>
+                    </span>
+                </li>
+            </ul>
+
+            <div class="recent-orders">
+                <h2>Recent Orders</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Products Name</th>
+                            <th>Products Number</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Figuran samping</td>
+                            <td>E123</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary"><button>Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>Figuran samping</td>
+                            <td>E123</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary"><button>Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>Figuran samping</td>
+                            <td>E123</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary"><button>Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>Figuran samping</td>
+                            <td>E123</td>
+                            <td>Due</td>
+                            <td class="warning">Pending</td>
+                            <td class="primary"><button>Details</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="#" class="show-all">Show All</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Logout Script -->
+    <script>
+        document.getElementById('logout').addEventListener('click', function() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('isLoggedIn')) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>
