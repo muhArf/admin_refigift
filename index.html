@@ -1,131 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Refi Gift</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Refi Gift</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .breadcrumb {
+      margin: 10px 0 20px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .breadcrumb a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <aside>
-            <div class="top">
-                <div class="logo">
-                    <img src="./images/logo.jpg" alt="Logo">
-                    <h2>REFIGIFT</h2>
-                </div>
-            </div>
-            <div class="sidebar">
-                <a href="index.html" class="active">
-                    <span class="material-icons-sharp">grid_view</span>
-                    <h3>Dashboard</h3>
-                </a>
-                <a href="orders.html">
-                    <span class="material-icons-sharp">receipt_long</span>
-                    <h3>Orders</h3>
-                </a>
-                <a href="products.html">
-                    <span class="material-icons-sharp">inventory</span>
-                    <h3>Products</h3>
-                </a>
-                <a href="javascript:void(0);" id="logout">
-                    <span class="material-icons-sharp">logout</span>
-                    <h3>Logout</h3>
-                </a>
-            </div>
-        </aside>
+  <div class="container">
 
-        <main>
-            <h1>Dashboard</h1>
-            <div class="date">
-                <input type="date">
-            </div>
-            <ul class="box-info">
-                <li>
-                    <i class='bx bxs-calendar-check'></i>
-                    <span class="text">
-                        <h3>1020</h3>
-                        <p>New Order</p>
-                    </span>
-                </li>
-                <li>
-                    <i class='bx bxs-group'></i>
-                    <span class="text">
-                        <h3>2834</h3>
-                        <p>Visitors</p>
-                    </span>
-                </li>
-                <li>
-                    <i class='bx bxs-dollar-circle'></i>
-                    <span class="text">
-                        <h3>$2543</h3>
-                        <p>Total Sales</p>
-                    </span>
-                </li>
-            </ul>
+    <!-- Sidebar Section -->
+    <aside>
+      <div class="toggle">
+        <div class="logo">
+          <img src="images/logo.png" alt="Logo" />
+          <h2>Refi<span class="danger">Gift</span></h2>
+        </div>
+        <div class="close" id="close-btn">
+          <span class="material-icons-sharp">close</span>
+        </div>
+      </div>
 
-            <div class="recent-orders">
-                <h2>Recent Orders</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Products Name</th>
-                            <th>Products Number</th>
-                            <th>Payment</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Figuran samping</td>
-                            <td>E123</td>
-                            <td>Due</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary"><button>Details</button></td>
-                        </tr>
-                        <tr>
-                            <td>Figuran samping</td>
-                            <td>E123</td>
-                            <td>Due</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary"><button>Details</button></td>
-                        </tr>
-                        <tr>
-                            <td>Figuran samping</td>
-                            <td>E123</td>
-                            <td>Due</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary"><button>Details</button></td>
-                        </tr>
-                        <tr>
-                            <td>Figuran samping</td>
-                            <td>E123</td>
-                            <td>Due</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary"><button>Details</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <a href="#" class="show-all">Show All</a>
+      <div class="sidebar">
+        <a href="index.html" class="active"> <!-- Link ke Dashboard -->
+          <span class="material-icons-sharp">dashboard</span>
+          <h3>Dashboard</h3>
+        </a>
+        <a href="order.html"> <!-- Link ke Orders -->
+          <span class="material-icons-sharp">receipt_long</span>
+          <h3>Orders</h3>
+        </a>
+        <a href="products.html"> <!-- Link ke Products -->
+          <span class="material-icons-sharp">inventory</span>
+          <h3>Products</h3>
+        </a>
+        <a href="logout.html"> <!-- Link ke Logout -->
+          <span class="material-icons-sharp">logout</span>
+          <h3>Logout</h3>
+        </a>
+      </div>
+    </aside>
+    <!-- End of Sidebar Section -->
+
+    <!-- Main Content -->
+    <main>
+      <h1>Dashboard</h1>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" id="breadcrumb"></nav>
+
+      <!-- Analyses Section -->
+      <div class="analyse">
+        <div class="sales">
+          <div class="status">
+            <div class="info">
+              <h3>Total Order</h3>
+              <h1>1,532</h1>
             </div>
-        </main>
+            <div class="progresss">
+              <div class="percentage">
+                <span class="material-icons-sharp icon-box sales-icon">monetization_on</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visits">
+          <div class="status">
+            <div class="info">
+              <h3>Site Visit</h3>
+              <h1>24,981</h1>
+            </div>
+            <div class="progresss">
+              <div class="percentage">
+                <span class="material-icons-sharp icon-box visits-icon">visibility</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="searches">
+          <div class="status">
+            <div class="info">
+              <h3>Searches</h3>
+              <h1>14,147</h1>
+            </div>
+            <div class="progresss">
+              <div class="percentage">
+                <span class="material-icons-sharp icon-box searches-icon">search</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of Analyses Section -->
+
+      <!-- Recent Orders Table -->
+      <div class="orders recent-orders">
+        <div class="header">
+          <h3>Recent Orders</h3>
+        </div>
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Product Image</th>
+              <th>Course Name</th>
+              <th>Course Number</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><img src="images/product1.jpg" alt="HTML & CSS Mastery" class="product-img" /></td>
+              <td>HTML & CSS Mastery</td>
+              <td>#CS-001</td>
+              <td>Paid</td>
+              <td><span class="status completed">Completed</span></td>
+              <td class="details"><a href="#">Details</a></td>
+            </tr>
+            <tr>
+              <td><img src="images/product2.jpg" alt="JavaScript Fundamentals" class="product-img" /></td>
+              <td>JavaScript Fundamentals</td>
+              <td>#CS-002</td>
+              <td>Pending</td>
+              <td><span class="status pending">Pending</span></td>
+              <td class="details"><a href="#">Details</a></td>
+            </tr>
+            <tr>
+              <td><img src="images/product3.jpg" alt="React Development" class="product-img" /></td>
+              <td>React Development</td>
+              <td>#CS-003</td>
+              <td>Paid</td>
+              <td><span class="status processing">Processing</span></td>
+              <td class="details"><a href="#">Details</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <a href="#" class="show-all">Show All</a>
+      </div>
+      <!-- End of Recent Orders Table -->
+    </main>
+    <!-- End of Main Content -->
+
+    <!-- Right Section -->
+    <div class="right-section">
+      <div class="nav">
+        <button id="menu-btn">
+          <span class="material-icons-sharp">menu</span>
+        </button>
+        <div class="profile">
+          <div class="info">
+            <p>Hey, <b>RefiGift</b></p>
+            <small class="text-muted">Admin</small>
+          </div>
+          <div class="profile-photo">
+            <img src="images/profile-1.jpg" alt="Profile Photo" />
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- End of Right Section -->
 
-    <!-- Logout Script -->
-    <script>
-        document.getElementById('logout').addEventListener('click', function() {
-            localStorage.removeItem('isLoggedIn');
-            window.location.href = 'login.html';
-        });
+  </div>
+  <!-- End of Container -->
 
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!localStorage.getItem('isLoggedIn')) {
-                window.location.href = 'login.html';
-            }
-        });
-    </script>
+  <!-- Scripts -->
+  <script src="orders.js"></script>
+  <script src="index.js"></script>
+
+  <script>
+    const menuLinks = document.querySelectorAll('.sidebar a');
+    const breadcrumb = document.getElementById('breadcrumb');
+
+    function updateBreadcrumb(activeLink) {
+      const section = activeLink.querySelector('h3').innerText;
+
+      breadcrumb.innerHTML = `
+        <a href="#">Home</a> &gt;
+        <a href="#">Admin</a> &gt;
+        <span>${section}</span>
+      `;
+    }
+
+    menuLinks.forEach(link => {
+      link.addEventListener('click', function (e) {
+        menuLinks.forEach(item => item.classList.remove('active'));
+        this.classList.add('active');
+        updateBreadcrumb(this);
+      });
+    });
+
+    // Set breadcrumb saat pertama kali halaman dimuat
+    const initialActive = document.querySelector('.sidebar a.active');
+    if (initialActive) updateBreadcrumb(initialActive);
+  </script>
 </body>
+
 </html>
