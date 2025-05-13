@@ -224,6 +224,11 @@ main{
     margin-top: 1.4rem;
 }
 
+main .wrapper-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
 main .analyse{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -576,7 +581,7 @@ main .recent-orders a{
     }
 
     main .recent-orders table{
-        width: 83vw;
+        /* width: 83vw; */
     }
 
     main table thead tr th:last-child,
@@ -903,4 +908,24 @@ main .recent-orders a{
     text-decoration: underline;
   }
 </style>
+
+@media screen and (max-width: 768px) {
+    aside .toggle .close {
+        display: block;
+    }
+
+    aside {
+        position: fixed;
+        left: -100%;
+        z-index: 3;
+        background-color: var(--color-white);
+        width: 18rem;
+        box-shadow: var(--box-shadow);
+        transition: left 0.3s ease;
+    }
+
+    aside.show {
+        left: 0;
+    }
+}
 

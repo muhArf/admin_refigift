@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="ADMIN_REFIGIFT/logo.jpg" type="image/png">
+    <title>Refi Gift | Orders</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        body {
+            background-color: #f0f4ff; /* Light blue background */
+            font-family: 'Open Sans', sans-serif;
+        }
+        .orders {
+            margin-top: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            box-shadow: none; /* Remove shadow */
+        }
+        .styled-table thead tr {
+            background-color: #6c7ae0; /* Header background color */
+            color: #ffffff;
+            text-align: left;
+        }
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+            border: none; /* Remove borders */
+            text-align: left; /* Align text to the left */
+            border-radius: 0; /* Remove border radius */
+        }
+        .styled-table tbody tr {
+            background-color: #ffffff; /* Row background color */
+        }
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f2f2f2; /* Alternate row color */
+        }
+        .styled-table tbody tr:hover {
+            background-color: #e0e7ff; /* Light blue on hover */
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: white;
+            display: inline-block;
+        }
+        .status.completed {
+            background-color: #4CAF50; /* Green */
+        }
+        .status.pending {
+            background-color: #FFC107; /* Yellow */
+        }
+        .actions {
+            text-align: center;
+        }
+        .actions a {
+            color: #6c7ae0;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="index.html" class="brand">
+            <img src="images/logo.svg" alt="Logo" style="height: 30px; margin-right: 10px;">
+            E-Admin
+        </a>
+        <ul class="side-menu">
+            <li><a href="index.html"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
+            <li>
+                <a href="orders.html" class="active"><i class='bx bxs-inbox icon'></i> Orders <i></i></a>
+            </li>
+            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Products </a></li>
+            <li class="divider"></li>
+            <li class="profile">
+                <div class="profile-details">
+                    <img src="images/profile-1.jpeg" alt="profileImg" />
+                    <div class="name_job">
+                        <div class="name">RefiGift</div>
+                        <div class="job">Admin</div>
+                    </div>
+                    <a href="#" class="logout-btn">
+                        <i class='bx bx-log-out' id="log_out"></i>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <section id="content">
+        <main>
+            <h1 class="title">Order Management</h1>
+            <ul class="breadcrumbs">
+                <li><a href="#">Home</a></li>
+                <li class="divider">/</li>
+                <li><a href="orders.html" class="active">Orders</a></li>
+            </ul>
+
+            <!-- Order Table -->
+            <div class="orders">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button id="addOrderBtn" style="padding: 10px 20px; background-color: #6c7ae0; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Tambah Order
+                    </button>
+                    <input type="text" id="searchInput" placeholder="Search..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 200px;">
+                </div>
+                <table class="styled-table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Customer Name</th>
+                            <th>Jumlah</th>
+                            <th>Tanggal Order</th>
+                            <th>Status Validasi</th>
+                            <th class="actions">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Laptop Lenovo</td>
+                            <td>3</td>
+                            <td>2025-05-04</td>
+                            <td><span class="status completed">Valid</span></td>
+                            <td class="actions"><a href="#">Detail</a></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Mouse Wireless</td>
+                            <td>10</td>
+                            <td>2025-05-02</td>
+                            <td><span class="status pending">Invalid</span></td>
+                            <td class="actions"><a href="#">Detail</a></td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- End of Order Table -->
+
+        </main>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Get the search input and table
+        const searchInput = document.getElementById('searchInput');
+        const ordersTable = document.getElementById('ordersTable');
+        
+        // Add event listener for input on the search box
+        searchInput.addEventListener('keyup', function() {
+            const filter = searchInput.value.toLowerCase();
+            const rows = ordersTable.getElementsByTagName('tr');
+
+            // Loop through all table rows (except the first, which is the header)
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let rowVisible = false;
+
+                // Loop through each cell in the row
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j]) {
+                        const cellText = cells[j].textContent || cells[j].innerText;
+                        if (cellText.toLowerCase().indexOf(filter) > -1) {
+                            rowVisible = true; // If a match is found, set rowVisible to true
+                            break; // No need to check other cells in this row
+                        }
+                    }
+                }
+
+                // Show or hide the row based on the search
+                rows[i].style.display = rowVisible ? '' : 'none';
+            }
+        });
+
+        // Function to get today's date in YYYY-MM-DD format
+        function getTodayDate() {
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            const yyyy = today.getFullYear();
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        // Add event listener for the "Tambah Order" button
+        document.getElementById('addOrderBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Tambah Order',
+                html: `
+                    <input type="text" id="customerName" class="swal2-input" placeholder="Customer Name">
+                    <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah">
+                    <input type="date" id="tanggalOrder" class="swal2-input" value="${getTodayDate()}">
+                    <select id="status" class="swal2-input">
+                        <option value="completed">Valid</option>
+                        <option value="pending">Invalid</option>
+                    </select>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                cancelButtonText: 'Exit',
+                preConfirm: () => {
+                    const customerName = document.getElementById('customerName').value;
+                    const jumlah = document.getElementById('jumlah').value;
+                    const tanggalOrder = document.getElementById('tanggalOrder').value;
+                    const status = document.getElementById('status').value;
+
+                    if (!customerName || !jumlah || !tanggalOrder) {
+                        Swal.showValidationMessage('Please fill in all fields');
+                    }
+
+                    return { customerName, jumlah, tanggalOrder, status };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const { customerName, jumlah, tanggalOrder, status } = result.value;
+
+                    // Here you can add the new order to the table
+                    const newRow = ordersTable.insertRow(-1);
+                    newRow.innerHTML = `
+                        <td>${ordersTable.rows.length - 1}</td>
+                        <td>${customerName}</td>
+                        <td>${jumlah}</td>
+                        <td>${tanggalOrder}</td>
+                        <td><span class="status ${status}">${status === 'completed' ? 'Valid' : 'Invalid'}</span></td>
+                        <td class="actions"><a href="#">Detail</a></td>
+                    `;
+
+                    Swal.fire('Order Added!', '', 'success');
+                } else if (result.isDismissed) {
+                    // Handle the exit action if necessary
+                    console.log('Popup exited without submission.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

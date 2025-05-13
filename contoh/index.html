@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="ADMIN_REFIGIFT/logo.jpg" type="image/png">
+    <title>Refi Gift | Admin</title>
+</head>
+<body>
+    
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="index.html" class="brand">
+            <img src="images/logo.svg" alt="Logo" style="height: 30px; margin-right: 10px;">
+            E-Admin
+        </a>
+        <ul class="side-menu">
+            <li><a href="index.html" class="active"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
+            <li>
+                <a href="orders.html"><i class='bx bxs-inbox icon'></i> Orders <i></i></a>
+            </li>
+            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Products </a></li>
+            <li class="divider"></li>
+            <li class="profile">
+                <div class="profile-details">
+                    <img src="images/profile-1.jpeg" alt="profileImg" />
+                    <div class="name_job">
+                        <div class="name">RefiGift</div>
+                        <div class="job">Admin</div>
+                    </div>
+                    <a href="#" class="logout-btn">
+                        <i class='bx bx-log-out' id="log_out"></i>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <section id="content">
+        <main>
+            <h1 class="title">Dashboard</h1>
+            <ul class="breadcrumbs">
+                <li><a href="#">Home</a></li>
+                <li class="divider">/</li>
+                <li><a href="input-nilai.html" class="active">Input Nilai</a></li>
+            </ul>
+
+            <!-- Analyses Section -->
+            <div class="wrapper-card">
+                <div class="analyse">
+                    <div class="card sales">
+                        <div class="status">
+                            <div class="info">
+                                <h3>Total Order</h3>
+                                <h1 id="totalOrder">0</h1>
+                                <button onclick="downloadReport()" class="more-btn">More</button>
+                            </div>
+                            <div class="icon-box sales-icon">
+                                <span class="material-icons-sharp">monetization_on</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card visits">
+                        <div class="status">
+                            <div class="info">
+                                <h3>Site Visit</h3>
+                                <h1>24,981</h1>
+                            </div>
+                            <div class="icon-box visits-icon">
+                                <span class="material-icons-sharp">visibility</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card searches">
+                        <div class="status">
+                            <div class="info">
+                                <h3>Searches</h3>
+                                <h1>14,147</h1>
+                            </div>
+                            <div class="icon-box searches-icon">
+                                <span class="material-icons-sharp">search</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Analyses Section -->
+
+            <!-- Recent Orders Table -->
+            <div class="orders recent-orders">
+                <div class="header">
+                    <h3>Recent Order</h3>
+                    <div class="filter">
+                        <select>
+                            <option>Today</option>
+                            <option>This Week</option>
+                            <option>This Month</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Produk</th>
+                            <th>Kode Order</th>
+                            <th>Pembayaran</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-status="completed">
+                            <td>HTML & CSS Mastery</td>
+                            <td>#CS-001</td>
+                            <td>Paid</td>
+                            <td><span class="status completed">Completed</span></td>
+                        </tr>
+                        <tr data-status="pending">
+                            <td>JavaScript Basics</td>
+                            <td>#JS-002</td>
+                            <td>Pending</td>
+                            <td><span class="status pending">Pending</span></td>
+                        </tr>
+                        <tr data-status="completed">
+                            <td>React for Beginners</td>
+                            <td>#RE-003</td>
+                            <td>Paid</td>
+                            <td><span class="status completed">Completed</span></td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- End of Recent Orders Table -->
+
+        </main>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        function updateTotalOrders() {
+            const rows = document.querySelectorAll('.recent-orders tbody tr');
+            let totalOrders = 0;
+
+            rows.forEach(row => {
+                if (row.dataset.status === 'completed') {
+                    totalOrders++;
+                }
+            });
+
+            document.getElementById('totalOrder').innerText = totalOrders;
+        }
+
+        // Call the function to update total orders on page load
+        updateTotalOrders();
+    </script>
+</body>
+</html>
