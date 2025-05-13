@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="ADMIN_REFIGIFT/logo.jpg" type="image/png">
+    <title>Refi Gift | Products</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        body {
+            background-color: #f0f4ff; /* Light blue background */
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .products {
+            margin-top: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            box-shadow: none; /* Remove shadow */
+        }
+
+        .styled-table thead tr {
+            background-color: #6c7ae0; /* Header background color */
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+            border: none; /* Remove borders */
+            text-align: left; /* Align text to the left */
+            border-radius: 0; /* Remove border radius */
+        }
+
+        .styled-table tbody tr {
+            background-color: #ffffff; /* Row background color */
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f2f2f2; /* Alternate row color */
+        }
+
+        .styled-table tbody tr:hover {
+            background-color: #e0e7ff; /* Light blue on hover */
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: white;
+            display: inline-block;
+        }
+
+        .status.valid {
+            background-color: #4CAF50; /* Green */
+        }
+
+        .status.invalid {
+            background-color: #FFC107; /* Yellow */
+        }
+
+        .actions {
+            text-align: center;
+        }
+
+        .actions a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 5px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .edit-btn {
+            background-color: #6c7ae0; /* Edit button color */
+        }
+
+        .edit-btn:hover {
+            background-color: #5a6dbd; /* Darker shade on hover */
+            transform: translateY(-2px); /* Lift effect */
+        }
+
+        .delete-btn {
+            background-color: #e74c3c; /* Delete button color */
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b; /* Darker shade on hover */
+            transform: translateY(-2px); /* Lift effect */
+        }
+
+        .search-box {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .add-product-btn {
+            padding: 10px 20px;
+            background-color: #6c7ae0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-box input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 250px;
+        }
+
+        /* Custom styles for SweetAlert input fields */
+        .swal2-input {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s;
+        }
+
+        .swal2-input:focus {
+            border-color: #6c7ae0; /* Highlight border color on focus */
+            outline: none; /* Remove default outline */
+        }
+
+        .swal2-title {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .swal2-content {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="index.html" class="brand">
+            <img src="images/logo.svg" alt="Logo" style="height: 30px; margin-right: 10px;">
+            E-Admin
+        </a>
+        <ul class="side-menu">
+            <li><a href="index.html"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
+            <li>
+                <a href="orders.html"><i class='bx bxs-inbox icon'></i> Orders <i></i></a>
+            </li>
+            <li><a href="products.html" class="active"><i class='bx bxs-chart icon'></i> Products </a></li>
+            <li class="divider"></li>
+            <li class="profile">
+                <div class="profile-details">
+                    <img src="images/profile-1.jpeg" alt="profileImg" />
+                    <div class="name_job">
+                        <div class="name">RefiGift</div>
+                        <div class="job">Admin</div>
+                    </div>
+                    <a href="#" class="logout-btn">
+                        <i class='bx bx-log-out' id="log_out"></i>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <section id="content">
+        <main>
+            <h1 class="title">Product Management</h1>
+            <ul class="breadcrumbs">
+                <li><a href="#">Home</a></li>
+                <li class="divider">/</li>
+                <li><a href="products.html" class="active">Products</a></li>
+            </ul>
+
+            <div class="products">
+                <div class="search-box">
+                    <button class="add-product-btn" id="addProductBtn">Tambah Produk</button>
+                    <input type="text" id="searchInput" placeholder="Search...">
+                </div>
+                <table class="styled-table" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Nama Produk</th>
+                            <th>Gambar Produk</th>
+                            <th>Kategori</th>
+                            <th>Stocks</th>
+                            <th>Harga</th>
+                            <th class="actions">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Woody</td>
+                            <td><img src="images/product1.jpg" alt="Produk A" style="width: 100px;"></td>
+                            <td>Kategori 1</td>
+                            <td>50</td>
+                            <td>Rp 100.000</td>
+                            <td class="actions">
+                                <a href="#" class="edit-btn">Edit</a>
+                                <a href="#" class="delete-btn">Delete</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Buzz</td>
+                            <td><img src="images/product2.jpeg" alt="Produk B" style="width: 100px;"></td>
+                            <td>Kategori 2</td>
+                            <td>30</td>
+                            <td>Rp 200.000</td>
+                            <td class="actions">
+                                <a href="#" class="edit-btn">Edit</a>
+                                <a href="#" class="delete-btn">Delete</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Produk C</td>
+                            <td><img src="images/product3.jpg" alt="Produk C" style="width: 100px;"></td>
+                            <td>Kategori 3</td>
+                            <td>20</td>
+                            <td>Rp 150.000</td>
+                            <td class="actions">
+                                <a href="#" class="edit-btn">Edit</a>
+                                <a href="#" class="delete-btn">Delete</a>
+                            </td>
+                        </tr>
+                        <!-- Add more products as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Get the search input and table
+        const searchInput = document.getElementById('searchInput');
+        const productsTable = document.getElementById('productsTable');
+        
+        // Add event listener for input on the search box
+        searchInput.addEventListener('keyup', function() {
+            const filter = searchInput.value.toLowerCase();
+            const rows = productsTable.getElementsByTagName('tr');
+
+            // Loop through all table rows (except the first, which is the header)
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let rowVisible = false;
+
+                // Loop through each cell in the row
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j]) {
+                        const cellText = cells[j].textContent || cells[j].innerText;
+                        if (cellText.toLowerCase().indexOf(filter) > -1) {
+                            rowVisible = true; // If a match is found, set rowVisible to true
+                            break; // No need to check other cells in this row
+                        }
+                    }
+                }
+
+                // Show or hide the row based on the search
+                rows[i].style.display = rowVisible ? '' : 'none';
+            }
+        });
+
+        // Add event listener for the "Tambah Produk" button
+        document.getElementById('addProductBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Tambah Produk',
+                html: `
+                    <input type="text" id="productName" class="swal2-input" placeholder="Nama Produk">
+                    <input type="text" id="category" class="swal2-input" placeholder="Kategori">
+                    <input type="number" id="stock" class="swal2-input" placeholder="Stocks">
+                    <input type="number" id="price" class="swal2-input" placeholder="Harga">
+                    <input type="file" id="image" class="swal2-input" placeholder="Gambar Produk">
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                cancelButtonText: 'Exit',
+                preConfirm: () => {
+                    const productName = document.getElementById('productName').value;
+                    const category = document.getElementById('category').value;
+                    const stock = document.getElementById('stock').value;
+                    const price = document.getElementById('price').value;
+
+                    if (!productName || !category || !stock || !price) {
+                        Swal.showValidationMessage('Please fill in all fields');
+                    }
+
+                    return { productName, category, stock, price };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const { productName, category, stock, price } = result.value;
+
+                    // Here you can add the new product to the table
+                    const newRow = productsTable.insertRow(-1);
+                    newRow.innerHTML = `
+                        <td>${productName}</td>
+                        <td><img src="images/product-placeholder.jpg" alt="${productName}" style="width: 50px;"></td>
+                        <td>${category}</td>
+                        <td>${stock}</td>
+                        <td>Rp ${price}</td>
+                        <td class="actions">
+                            <a href="#" class="edit-btn">Edit</a>
+                            <a href="#" class="delete-btn">Delete</a>
+                        </td>
+                    `;
+
+                    Swal.fire('Product Added!', '', 'success');
+                } else if (result.isDismissed) {
+                    console.log('Popup exited without submission.');
+                }
+            });
+        });
+
+        // Add event listener for delete buttons
+        productsTable.addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete-btn')) {
+                event.preventDefault(); // Prevent the default anchor behavior
+                const row = event.target.closest('tr'); // Get the closest row
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Remove the row from the table
+                        row.remove();
+                        Swal.fire(
+                            'Deleted!',
+                            'Your product has been deleted.',
+                            'success'
+                        );
+                    }
+                });
+            }
+        });
+
+        // Add event listener for edit buttons
+        productsTable.addEventListener('click', function(event) {
+            if (event.target.classList.contains('edit-btn')) {
+                event.preventDefault(); // Prevent the default anchor behavior
+                const row = event.target.closest('tr'); // Get the closest row
+                const cells = row.getElementsByTagName('td');
+
+                // Get current product data
+                const productName = cells[0].innerText;
+                const category = cells[2].innerText;
+                const stock = cells[3].innerText;
+                const price = cells[4].innerText.replace('Rp ', '').replace('.', ''); // Remove 'Rp ' and format
+
+                Swal.fire({
+                    title: 'Edit Produk',
+                    html: `
+                        <input type="text" id="editProductName" class="swal2-input" placeholder="Nama Produk" value="${productName}">
+                        <input type="text" id="editCategory" class="swal2-input" placeholder="Kategori" value="${category}">
+                        <input type="number" id="editStock" class="swal2-input" placeholder="Stocks" value="${stock}">
+                        <input type="number" id="editPrice" class="swal2-input" placeholder="Harga" value="${price}">
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Update Data',
+                    cancelButtonText: 'Cancel',
+                    preConfirm: () => {
+                        const updatedProductName = document.getElementById('editProductName').value;
+                        const updatedCategory = document.getElementById('editCategory').value;
+                        const updatedStock = document.getElementById('editStock').value;
+                        const updatedPrice = document.getElementById('editPrice').value;
+
+                        if (!updatedProductName || !updatedCategory || !updatedStock || !updatedPrice) {
+                            Swal.showValidationMessage('Please fill in all fields');
+                        }
+
+                        return { updatedProductName, updatedCategory, updatedStock, updatedPrice };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const { updatedProductName, updatedCategory, updatedStock, updatedPrice } = result.value;
+
+                        // Update the product data in the table
+                        cells[0].innerText = updatedProductName;
+                        cells[2].innerText = updatedCategory;
+                        cells[3].innerText = updatedStock;
+                        cells[4].innerText = 'Rp ' + updatedPrice.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Format price
+
+                        Swal.fire('Product Updated!', '', 'success');
+                    } else if (result.isDismissed) {
+                        console.log('Popup exited without updating.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
