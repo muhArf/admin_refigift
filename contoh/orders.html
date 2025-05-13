@@ -118,35 +118,44 @@
                     <button id="addOrderBtn" style="padding: 10px 20px; background-color: #6c7ae0; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Tambah Order
                     </button>
-                    <input type="text" id="searchInput" placeholder="Search..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 200px;">
+                    <input type="text" id="searchInput" placeholder="Search..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 250px;">
                 </div>
                 <table class="styled-table" id="ordersTable">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Customer Name</th>
+                            <th>Nama Customer</th>
+                            <th>Nama Produk</th>
                             <th>Jumlah</th>
-                            <th>Tanggal Order</th>
+                            <th>Total Harga</th>
+                            <th>Tanggal Pesan</th>
+                            <th>Status Pembayaran</th>
                             <th>Status Validasi</th>
+                            <th>Status Pemesanan</th>
                             <th class="actions">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1</td>
+                            <td>John Doe</td>
                             <td>Laptop Lenovo</td>
-                            <td>3</td>
+                            <td>1</td>
+                            <td>Rp 15.000.000</td>
                             <td>2025-05-04</td>
+                            <td><span class="status completed">Sudah Bayar</span></td>
                             <td><span class="status completed">Valid</span></td>
-                            <td class="actions"><a href="#">Detail</a></td>
+                            <td><span class="status completed">Dikirim</span></td>
+                            <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
                         </tr>
                         <tr>
-                            <td>2</td>
+                            <td>Jane Smith</td>
                             <td>Mouse Wireless</td>
-                            <td>10</td>
+                            <td>2</td>
+                            <td>Rp 300.000</td>
                             <td>2025-05-02</td>
+                            <td><span class="status pending">Belum Bayar</span></td>
                             <td><span class="status pending">Invalid</span></td>
-                            <td class="actions"><a href="#">Detail</a></td>
+                            <td><span class="status pending">Belum Dikirim</span></td>
+                            <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
                         </tr>
                         <!-- Add more rows as needed -->
                     </tbody>
@@ -205,11 +214,21 @@
                 title: 'Tambah Order',
                 html: `
                     <input type="text" id="customerName" class="swal2-input" placeholder="Customer Name">
+                    <input type="text" id="productName" class="swal2-input" placeholder="Nama Produk">
                     <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah">
+                    <input type="text" id="totalHarga" class="swal2-input" placeholder="Total Harga">
                     <input type="date" id="tanggalOrder" class="swal2-input" value="${getTodayDate()}">
-                    <select id="status" class="swal2-input">
+                    <select id="statusPembayaran" class="swal2-input">
+                        <option value="completed">Sudah Bayar</option>
+                        <option value="pending">Belum Bayar</option>
+                    </select>
+                    <select id="statusValidasi" class="swal2-input">
                         <option value="completed">Valid</option>
                         <option value="pending">Invalid</option>
+                    </select>
+                    <select id="statusPemesanan" class="swal2-input">
+                        <option value="completed">Dikirim</option>
+                        <option value="pending">Belum Dikirim</option>
                     </select>
                 `,
                 focusConfirm: false,
@@ -218,34 +237,40 @@
                 cancelButtonText: 'Exit',
                 preConfirm: () => {
                     const customerName = document.getElementById('customerName').value;
+                    const productName = document.getElementById('productName').value;
                     const jumlah = document.getElementById('jumlah').value;
+                    const totalHarga = document.getElementById('totalHarga').value;
                     const tanggalOrder = document.getElementById('tanggalOrder').value;
-                    const status = document.getElementById('status').value;
+                    const statusPembayaran = document.getElementById('statusPembayaran').value;
+                    const statusValidasi = document.getElementById('statusValidasi').value;
+                    const statusPemesanan = document.getElementById('statusPemesanan').value;
 
-                    if (!customerName || !jumlah || !tanggalOrder) {
+                    if (!customerName || !productName || !jumlah || !totalHarga || !tanggalOrder) {
                         Swal.showValidationMessage('Please fill in all fields');
                     }
 
-                    return { customerName, jumlah, tanggalOrder, status };
+                    return { customerName, productName, jumlah, totalHarga, tanggalOrder, statusPembayaran, statusValidasi, statusPemesanan };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const { customerName, jumlah, tanggalOrder, status } = result.value;
+                    const { customerName, productName, jumlah, totalHarga, tanggalOrder, statusPembayaran, statusValidasi, statusPemesanan } = result.value;
 
                     // Here you can add the new order to the table
                     const newRow = ordersTable.insertRow(-1);
                     newRow.innerHTML = `
-                        <td>${ordersTable.rows.length - 1}</td>
                         <td>${customerName}</td>
+                        <td>${productName}</td>
                         <td>${jumlah}</td>
+                        <td>Rp ${totalHarga}</td>
                         <td>${tanggalOrder}</td>
-                        <td><span class="status ${status}">${status === 'completed' ? 'Valid' : 'Invalid'}</span></td>
-                        <td class="actions"><a href="#">Detail</a></td>
+                        <td><span class="status ${statusPembayaran === 'completed' ? 'completed' : 'pending'}">${statusPembayaran}</span></td>
+                        <td><span class="status ${statusValidasi === 'completed' ? 'completed' : 'pending'}">${statusValidasi}</span></td>
+                        <td><span class="status ${statusPemesanan === 'completed' ? 'completed' : 'pending'}">${statusPemesanan}</span></td>
+                        <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
                     `;
 
                     Swal.fire('Order Added!', '', 'success');
                 } else if (result.isDismissed) {
-                    // Handle the exit action if necessary
                     console.log('Popup exited without submission.');
                 }
             });
