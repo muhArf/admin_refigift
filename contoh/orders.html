@@ -70,6 +70,51 @@
             text-decoration: none;
             font-weight: bold;
         }
+
+        /* Custom styles for SweetAlert input fields */
+        .swal2-input {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            width: calc(100% - 20px); /* Full width minus padding */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s;
+        }
+
+        .swal2-input:focus {
+            border-color: #6c7ae0; /* Highlight border color on focus */
+            outline: none; /* Remove default outline */
+        }
+
+        .swal2-title {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .swal2-content {
+            color: #555;
+            margin-bottom: 10px; /* Add margin below content */
+        }
+
+        /* Styles for radio buttons */
+        .radio-container {
+            display: flex;
+            flex-direction: column;
+            margin: 10px 0;
+        }
+
+        .radio-container label {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        .radio-container input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -83,9 +128,9 @@
         <ul class="side-menu">
             <li><a href="index.html"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
             <li>
-                <a href="orders.html" class="active"><i class='bx bxs-inbox icon'></i> Orders <i></i></a>
+                <a href="orders.html" class="active"><i class='bx bxs-inbox icon'></i> Pesanan <i></i></a>
             </li>
-            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Products </a></li>
+            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Produk </a></li>
             <li class="divider"></li>
             <li class="profile">
                 <div class="profile-details">
@@ -118,11 +163,12 @@
                     <button id="addOrderBtn" style="padding: 10px 20px; background-color: #6c7ae0; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Tambah Order
                     </button>
-                    <input type="text" id="searchInput" placeholder="Search..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 250px;">
+                    <input type="text" id="searchInput" placeholder="Search..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 200px;">
                 </div>
                 <table class="styled-table" id="ordersTable">
                     <thead>
                         <tr>
+                            <th>No</th> <!-- Kolom nomor -->
                             <th>Nama Customer</th>
                             <th>Nama Produk</th>
                             <th>Jumlah</th>
@@ -136,6 +182,7 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td>1</td> <!-- Nomor urut -->
                             <td>John Doe</td>
                             <td>Laptop Lenovo</td>
                             <td>1</td>
@@ -147,6 +194,7 @@
                             <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
                         </tr>
                         <tr>
+                            <td>2</td> <!-- Nomor urut -->
                             <td>Jane Smith</td>
                             <td>Mouse Wireless</td>
                             <td>2</td>
@@ -218,18 +266,39 @@
                     <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah">
                     <input type="text" id="totalHarga" class="swal2-input" placeholder="Total Harga">
                     <input type="date" id="tanggalOrder" class="swal2-input" value="${getTodayDate()}">
-                    <select id="statusPembayaran" class="swal2-input">
-                        <option value="completed">Sudah Bayar</option>
-                        <option value="pending">Belum Bayar</option>
-                    </select>
-                    <select id="statusValidasi" class="swal2-input">
-                        <option value="completed">Valid</option>
-                        <option value="pending">Invalid</option>
-                    </select>
-                    <select id="statusPemesanan" class="swal2-input">
-                        <option value="completed">Dikirim</option>
-                        <option value="pending">Belum Dikirim</option>
-                    </select>
+                    <div class="radio-container">
+                        <strong>Status Pembayaran:</strong>
+                        <label>
+                            <input type="radio" name="statusPembayaran" value="completed">
+                            Sudah Bayar
+                        </label>
+                        <label>
+                            <input type="radio" name="statusPembayaran" value="pending">
+                            Belum Bayar
+                        </label>
+                    </div>
+                    <div class="radio-container">
+                        <strong>Status Validasi:</strong>
+                        <label>
+                            <input type="radio" name="statusValidasi" value="completed">
+                            Valid
+                        </label>
+                        <label>
+                            <input type="radio" name="statusValidasi" value="pending">
+                            Invalid
+                        </label>
+                    </div>
+                    <div class="radio-container">
+                        <strong>Status Pemesanan:</strong>
+                        <label>
+                            <input type="radio" name="statusPemesanan" value="completed">
+                            Dikirim
+                        </label>
+                        <label>
+                            <input type="radio" name="statusPemesanan" value="pending">
+                            Belum Dikirim
+                        </label>
+                    </div>
                 `,
                 focusConfirm: false,
                 showCancelButton: true,
@@ -241,9 +310,9 @@
                     const jumlah = document.getElementById('jumlah').value;
                     const totalHarga = document.getElementById('totalHarga').value;
                     const tanggalOrder = document.getElementById('tanggalOrder').value;
-                    const statusPembayaran = document.getElementById('statusPembayaran').value;
-                    const statusValidasi = document.getElementById('statusValidasi').value;
-                    const statusPemesanan = document.getElementById('statusPemesanan').value;
+                    const statusPembayaran = document.querySelector('input[name="statusPembayaran"]:checked') ? document.querySelector('input[name="statusPembayaran"]:checked').value : 'pending';
+                    const statusValidasi = document.querySelector('input[name="statusValidasi"]:checked') ? document.querySelector('input[name="statusValidasi"]:checked').value : 'pending';
+                    const statusPemesanan = document.querySelector('input[name="statusPemesanan"]:checked') ? document.querySelector('input[name="statusPemesanan"]:checked').value : 'pending';
 
                     if (!customerName || !productName || !jumlah || !totalHarga || !tanggalOrder) {
                         Swal.showValidationMessage('Please fill in all fields');
@@ -258,14 +327,15 @@
                     // Here you can add the new order to the table
                     const newRow = ordersTable.insertRow(-1);
                     newRow.innerHTML = `
+                        <td>${ordersTable.rows.length - 1}</td> <!-- Nomor urut berdasarkan jumlah baris -->
                         <td>${customerName}</td>
                         <td>${productName}</td>
                         <td>${jumlah}</td>
                         <td>Rp ${totalHarga}</td>
                         <td>${tanggalOrder}</td>
-                        <td><span class="status ${statusPembayaran === 'completed' ? 'completed' : 'pending'}">${statusPembayaran}</span></td>
-                        <td><span class="status ${statusValidasi === 'completed' ? 'completed' : 'pending'}">${statusValidasi}</span></td>
-                        <td><span class="status ${statusPemesanan === 'completed' ? 'completed' : 'pending'}">${statusPemesanan}</span></td>
+                        <td><span class="status ${statusPembayaran === 'completed' ? 'completed' : 'pending'}">${statusPembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
+                        <td><span class="status ${statusValidasi === 'completed' ? 'completed' : 'pending'}">${statusValidasi === 'completed' ? 'Valid' : 'Invalid'}</span></td>
+                        <td><span class="status ${statusPemesanan === 'completed' ? 'completed' : 'pending'}">${statusPemesanan === 'completed' ? 'Dikirim' : 'Belum Dikirim'}</span></td>
                         <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
                     `;
 
