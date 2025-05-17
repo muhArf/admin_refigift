@@ -78,16 +78,39 @@ function add_product($conn) {
 }
 
 function update_product($conn) {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $id = $data['id'];
-    $name = $data['name'];
-    $category = $data['category'];
-    $stock = $data['stock'];
-    $price = $data['price'];
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $category = $_POST['category'];
+    $stock = $_POST['stock'];
+    $price = $_POST['price'];
 
-    $stmt = $conn->prepare("UPDATE products SET name=?, category=?, stock=?, price=? WHERE id=?");
-    $stmt->bind_param("ssidi", $name, $category, $stock, $price, $id);
-    $stmt->execute();
+    // Handle image upload if a new image is provided
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $image = $_FILES['image'];
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($image["name"]);
+
+        // Check if the image is a valid JPG file
+        if ($image['type'] == 'image/jpeg') {
+            if (move_uploaded_file($image["tmp_name"], $target_file)) {
+                // Update the product with new image
+                $stmt = $conn->prepare("UPDATE products SET name=?, category=?, stock=?, price=?, image=? WHERE id=?");
+                $stmt->bind_param("ssissi", $name, $category, $stock, $price, $target_file, $id);
+                $stmt->execute();
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Image upload failed']);
+                return;
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Only JPG files are allowed']);
+            return;
+        }
+    } else {
+        // Update the product without changing the image
+        $stmt = $conn->prepare("UPDATE products SET name=?, category=?, stock=?, price=? WHERE id=?");
+        $stmt->bind_param("ssisi", $name, $category, $stock, $price, $id);
+        $stmt->execute();
+    }
 
     echo json_encode(['status' => 'success']);
 }

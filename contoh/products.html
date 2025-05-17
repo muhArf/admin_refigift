@@ -335,14 +335,16 @@
                 })
                 .then(response => response.json())
                 .then(product => {
+                    const imageUrl = product.image ? product.image : ''; // Ensure image URL is defined
                     Swal.fire({
                         title: 'Edit Produk',
                         html: `
-                            <input type="text" id="editProductName" class="swal2-input" placeholder="Nama Produk" value="${product.name}">
-                            <input type="text" id="editCategory" class="swal2-input" placeholder="Kategori" value="${product.category}">
-                            <input type="number" id="editStock" class="swal2-input" placeholder="Stocks" value="${product.stock}">
-                            <input type="number" id="editPrice" class="swal2-input" placeholder="Harga" value="${product.price}">
-                            <input type="text" id="editImage" class="swal2-input" placeholder="Gambar Produk URL" value="${product.image}">
+                            <input type="text" id="editProductName" class="swal2-input" placeholder="Nama Produk" value="${product.name || ''}">
+                            <input type="text" id="editCategory" class="swal2-input" placeholder="Kategori" value="${product.category || ''}">
+                            <input type="number" id="editStock" class="swal2-input" placeholder="Stocks" value="${product.stock || ''}">
+                            <input type="number" id="editPrice" class="swal2-input" placeholder="Harga" value="${product.price || ''}">
+                            <input type="file" id="editImage" class="swal2-input" accept="image/jpeg">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${product.name}" style="width: 100px; margin-top: 10px;">` : ''}
                         `,
                         focusConfirm: false,
                         showCancelButton: true,
@@ -353,9 +355,9 @@
                             const updatedCategory = document.getElementById('editCategory').value;
                             const updatedStock = document.getElementById('editStock').value;
                             const updatedPrice = document.getElementById('editPrice').value;
-                            const updatedImage = document.getElementById('editImage').value;
+                            const updatedImage = document.getElementById('editImage').files[0];
 
-                            if (!updatedProductName || !updatedCategory || !updatedStock || !updatedPrice || !updatedImage) {
+                            if (!updatedProductName || !updatedCategory || !updatedStock || !updatedPrice) {
                                 Swal.showValidationMessage('Please fill in all fields');
                             }
 
@@ -365,12 +367,19 @@
                         if (result.isConfirmed) {
                             const { id, updatedProductName, updatedCategory, updatedStock, updatedPrice, updatedImage } = result.value;
 
+                            const formData = new FormData();
+                            formData.append('id', id);
+                            formData.append('name', updatedProductName);
+                            formData.append('category', updatedCategory);
+                            formData.append('stock', updatedStock);
+                            formData.append('price', updatedPrice);
+                            if (updatedImage) {
+                                formData.append('image', updatedImage); // Include new image if provided
+                            }
+
                             fetch('products_backend.php', {
                                 method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ id, name: updatedProductName, category: updatedCategory, stock: updatedStock, price: updatedPrice, image: updatedImage })
+                                body: formData
                             })
                             .then(response => response.json())
                             .then(data => {
