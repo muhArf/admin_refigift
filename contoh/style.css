@@ -37,6 +37,8 @@ li {
   list-style: none;
 }
 
+
+
 /* SIDEBAR */
 #sidebar {
   position: fixed;
@@ -101,7 +103,7 @@ li {
 #sidebar .side-menu a {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 12px;
   color: var(--dark);
   padding: 12px 16px 12px 0;
   transition: all .3s ease;
@@ -345,21 +347,28 @@ main .form-group input, main .btn-send {
 }
 
 /* Table Styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  overflow: hidden; /* Ensures rounded corners are visible */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-table th, table td {
-  padding: 12px;
-  text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+.styled-table th {
+    padding: 12px;
+    text-align: center; /* Memusatkan teks di header */
+    border-bottom: 1px solid #ddd;
+    background-color: var(--blue);
+    color: white;
+    font-size: 14px; /* Ukuran tulisan untuk header */
 }
+
+.styled-table td {
+    padding: 12px;
+    text-align: center; /* Memusatkan teks di data */
+    border-bottom: 1px solid #ddd;
+    font-size: 12px; /* Ukuran tulisan untuk data */
+}
+
+
 
 table th {
   background-color: var(--blue);
@@ -469,20 +478,12 @@ table td img.product-img {
   font-size: 20px;
 }
 
-/* Analyses Section Styling */
-.analyse {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.6rem;
-}
 
 .card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
+    width: 90%; /* Adjust based on the container size */
+    max-width: 300px; /* Maximum width */
+    height: auto; /* Let the height adjust automatically */
+    /* Other styles */
 }
 
 .card:hover {
@@ -512,16 +513,7 @@ table td img.product-img {
     color: #333;
 }
 
-.more-btn {
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
+
 
 .more-btn:hover {
     background-color: #0056b3;
@@ -574,11 +566,6 @@ table td img.product-img {
     border-collapse: collapse;
 }
 
-.styled-table th, .styled-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
 
 .styled-table th {
     background-color: var(--blue);
@@ -628,11 +615,7 @@ table td img.product-img {
     border-collapse: collapse;
 }
 
-.styled-table th, .styled-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
+
 
 .styled-table th {
     background-color: var(--blue);
@@ -689,13 +672,7 @@ table td img.product-img {
 .action-btn:hover {
     background-color: #0056b3;
 }
-/* Wrapper Card Style */
-.wrapper-card {
-  margin-top: 30px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
+
 
 /* Card Layout */
 .analyse .card {
@@ -746,29 +723,13 @@ table td img.product-img {
   background-color: #ffd6e0;
 }
 
-/* Info Text Styling */
-.info h3 {
-  font-size: 16px;
-  color: var(--dark-grey);
-  margin-bottom: 4px;
-}
+
 .info h1 {
   font-size: 28px;
   color: var(--dark);
   margin-bottom: 8px;
 }
 
-/* Button Style */
-.more-btn {
-  padding: 6px 12px;
-  font-size: 13px;
-  background-color: var(--blue);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
 
 .more-btn:hover {
   background-color: var(--dark-blue);
@@ -805,4 +766,97 @@ table td img.product-img {
   color: var(--blue);
 }
 
+
+/* Wrapper Card Style */
+.wrapper-card {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusted min width */
+  gap: 20px;
+}
+
+/* Card Layout */
+
+
+/* Card Hover Effect */
+.analyse .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Slightly darker shadow on hover */
+}
+
+/* Card Content Layout */
+.card .status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Keep info and icon separated */
+  gap: 15px; /* Reduced gap */
+}
+
+/* Info Text Styling */
+.info h3 {
+  font-size: 0.8rem; /* Adjusted font size */
+  color: var(--dark-grey);
+  margin-bottom: 4px;
+}
+.info h1 {
+  font-size: 1.5rem; /* Adjusted font size */
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+
+
+.more-btn:hover {
+  background-color: var(--dark-blue);
+}
+
+/* Icon Box Styling */
+.icon-box {
+  background-color: var(--light-blue);
+  padding: 12px; /* Adjusted padding */
+  border-radius: 10px; /* Slightly smaller radius */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px; /* Ensured a minimum width */
+  min-height: 50px; /* Ensured a minimum height */
+}
+
+.icon-box span {
+  font-size: 22px; /* Adjusted icon size */
+  color: var(--blue);
+}
+
+/* Card Layout */
+.analyse {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Button Styling */
+.more-btn {
+    padding: 8px 18px; /* Increased padding for a larger button */
+    background-color: var(--blue); /* Button background color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 12px; /* Font size */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+    margin-top: 5px; /* Space above the button */
+    text-align: center; /* Center align text */
+}
+
+/* Button Hover Effect */
+.more-btn:hover {
+    background-color: var(--dark-blue); /* Darker background on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+
+/* Card Hover Effect */
+.card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
+}
 

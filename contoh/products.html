@@ -27,7 +27,7 @@
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            font-size: 1rem;
+            font-size: 0.8rem;
             box-shadow: none; /* Remove shadow */
         }
 
@@ -41,7 +41,7 @@
         .styled-table td {
             padding: 12px 15px;
             border: none; /* Remove borders */
-            text-align: left; /* Align text to the left */
+            text-align: center; /* Align text to the left */
             border-radius: 0; /* Remove border radius */
         }
 
@@ -211,40 +211,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Woody</td>
-                            <td><img src="images/product1.jpg" alt="Produk A" style="width: 100px;"></td>
-                            <td>Kategori 1</td>
-                            <td>50</td>
-                            <td>Rp 100.000</td>
-                            <td class="actions">
-                                <a href="#" class="edit-btn">Edit</a>
-                                <a href="#" class="delete-btn">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Buzz</td>
-                            <td><img src="images/product2.jpeg" alt="Produk B" style="width: 100px;"></td>
-                            <td>Kategori 2</td>
-                            <td>30</td>
-                            <td>Rp 200.000</td>
-                            <td class="actions">
-                                <a href="#" class="edit-btn">Edit</a>
-                                <a href="#" class="delete-btn">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Produk C</td>
-                            <td><img src="images/product3.jpg" alt="Produk C" style="width: 100px;"></td>
-                            <td>Kategori 3</td>
-                            <td>20</td>
-                            <td>Rp 150.000</td>
-                            <td class="actions">
-                                <a href="#" class="edit-btn">Edit</a>
-                                <a href="#" class="delete-btn">Delete</a>
-                            </td>
-                        </tr>
-                        <!-- Add more products as needed -->
+                        <!-- Rows will be populated dynamically -->
                     </tbody>
                 </table>
             </div>
@@ -254,37 +221,36 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Get the search input and table
-        const searchInput = document.getElementById('searchInput');
-        const productsTable = document.getElementById('productsTable');
-        
-        // Add event listener for input on the search box
-        searchInput.addEventListener('keyup', function() {
-            const filter = searchInput.value.toLowerCase();
-            const rows = productsTable.getElementsByTagName('tr');
+        // Function to fetch products
+        function fetchProducts() {
+            fetch('products_backend.php', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                const productsTable = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
+                productsTable.innerHTML = ''; // Clear existing rows
+                data.forEach(product => {
+                    const newRow = productsTable.insertRow();
+                    newRow.innerHTML = `
+                        <td>${product.name}</td>
+                        <td><img src="${product.image}" alt="${product.name}" style="width: 100px;"></td>
+                        <td>${product.category}</td>
+                        <td>${product.stock}</td>
+                        <td>Rp ${parseFloat(product.price).toFixed(2)}</td>
+                        <td class="actions">
+                            <a href="#" class="edit-btn" data-id="${product.id}">Edit</a>
+                            <a href="#" class="delete-btn" data-id="${product.id}">Delete</a>
+                        </td>
+                    `;
+                });
+            });
+        }
 
-            // Loop through all table rows (except the first, which is the header)
-            for (let i = 1; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                let rowVisible = false;
+        // Call fetchProducts on page load
+        document.addEventListener('DOMContentLoaded', fetchProducts);
 
-                // Loop through each cell in the row
-                for (let j = 0; j < cells.length; j++) {
-                    if (cells[j]) {
-                        const cellText = cells[j].textContent || cells[j].innerText;
-                        if (cellText.toLowerCase().indexOf(filter) > -1) {
-                            rowVisible = true; // If a match is found, set rowVisible to true
-                            break; // No need to check other cells in this row
-                        }
-                    }
-                }
-
-                // Show or hide the row based on the search
-                rows[i].style.display = rowVisible ? '' : 'none';
-            }
-        });
-
-        // Add event listener for the "Tambah Produk" button
+        // Add event listener for adding products
         document.getElementById('addProductBtn').addEventListener('click', function() {
             Swal.fire({
                 title: 'Tambah Produk',
@@ -293,7 +259,7 @@
                     <input type="text" id="category" class="swal2-input" placeholder="Kategori">
                     <input type="number" id="stock" class="swal2-input" placeholder="Stocks">
                     <input type="number" id="price" class="swal2-input" placeholder="Harga">
-                    <input type="file" id="image" class="swal2-input" placeholder="Gambar Produk">
+                    <input type="text" id="image" class="swal2-input" placeholder="Gambar Produk URL">
                 `,
                 focusConfirm: false,
                 showCancelButton: true,
@@ -304,43 +270,41 @@
                     const category = document.getElementById('category').value;
                     const stock = document.getElementById('stock').value;
                     const price = document.getElementById('price').value;
+                    const image = document.getElementById('image').value;
 
-                    if (!productName || !category || !stock || !price) {
+                    if (!productName || !category || !stock || !price || !image) {
                         Swal.showValidationMessage('Please fill in all fields');
                     }
 
-                    return { productName, category, stock, price };
+                    return { productName, category, stock, price, image };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const { productName, category, stock, price } = result.value;
+                    const { productName, category, stock, price, image } = result.value;
 
-                    // Here you can add the new product to the table
-                    const newRow = productsTable.insertRow(-1);
-                    newRow.innerHTML = `
-                        <td>${productName}</td>
-                        <td><img src="images/product-placeholder.jpg" alt="${productName}" style="width: 50px;"></td>
-                        <td>${category}</td>
-                        <td>${stock}</td>
-                        <td>Rp ${price}</td>
-                        <td class="actions">
-                            <a href="#" class="edit-btn">Edit</a>
-                            <a href="#" class="delete-btn">Delete</a>
-                        </td>
-                    `;
-
-                    Swal.fire('Product Added!', '', 'success');
-                } else if (result.isDismissed) {
-                    console.log('Popup exited without submission.');
+                    fetch('products_backend.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name: productName, category, stock, price, image })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            Swal.fire('Product Added!', '', 'success');
+                            fetchProducts(); // Refresh the product list
+                        }
+                    });
                 }
             });
         });
 
         // Add event listener for delete buttons
-        productsTable.addEventListener('click', function(event) {
+        document.getElementById('productsTable').addEventListener('click', function(event) {
             if (event.target.classList.contains('delete-btn')) {
-                event.preventDefault(); // Prevent the default anchor behavior
-                const row = event.target.closest('tr'); // Get the closest row
+                event.preventDefault();
+                const id = event.target.dataset.id;
 
                 Swal.fire({
                     title: 'Are you sure?',
@@ -352,69 +316,83 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Remove the row from the table
-                        row.remove();
-                        Swal.fire(
-                            'Deleted!',
-                            'Your product has been deleted.',
-                            'success'
-                        );
+                        fetch('products_backend.php', {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ id })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
+                                fetchProducts(); // Refresh the product list
+                            }
+                        });
                     }
                 });
             }
         });
 
         // Add event listener for edit buttons
-        productsTable.addEventListener('click', function(event) {
+        document.getElementById('productsTable').addEventListener('click', function(event) {
             if (event.target.classList.contains('edit-btn')) {
-                event.preventDefault(); // Prevent the default anchor behavior
-                const row = event.target.closest('tr'); // Get the closest row
-                const cells = row.getElementsByTagName('td');
+                event.preventDefault();
+                const id = event.target.dataset.id;
 
-                // Get current product data
-                const productName = cells[0].innerText;
-                const category = cells[2].innerText;
-                const stock = cells[3].innerText;
-                const price = cells[4].innerText.replace('Rp ', '').replace('.', ''); // Remove 'Rp ' and format
+                // Fetch product details for editing
+                fetch(`products_backend.php?id=${id}`, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(product => {
+                    Swal.fire({
+                        title: 'Edit Produk',
+                        html: `
+                            <input type="text" id="editProductName" class="swal2-input" placeholder="Nama Produk" value="${product.name}">
+                            <input type="text" id="editCategory" class="swal2-input" placeholder="Kategori" value="${product.category}">
+                            <input type="number" id="editStock" class="swal2-input" placeholder="Stocks" value="${product.stock}">
+                            <input type="number" id="editPrice" class="swal2-input" placeholder="Harga" value="${product.price}">
+                            <input type="text" id="editImage" class="swal2-input" placeholder="Gambar Produk URL" value="${product.image}">
+                        `,
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: 'Update Data',
+                        cancelButtonText: 'Cancel',
+                        preConfirm: () => {
+                            const updatedProductName = document.getElementById('editProductName').value;
+                            const updatedCategory = document.getElementById('editCategory').value;
+                            const updatedStock = document.getElementById('editStock').value;
+                            const updatedPrice = document.getElementById('editPrice').value;
+                            const updatedImage = document.getElementById('editImage').value;
 
-                Swal.fire({
-                    title: 'Edit Produk',
-                    html: `
-                        <input type="text" id="editProductName" class="swal2-input" placeholder="Nama Produk" value="${productName}">
-                        <input type="text" id="editCategory" class="swal2-input" placeholder="Kategori" value="${category}">
-                        <input type="number" id="editStock" class="swal2-input" placeholder="Stocks" value="${stock}">
-                        <input type="number" id="editPrice" class="swal2-input" placeholder="Harga" value="${price}">
-                    `,
-                    focusConfirm: false,
-                    showCancelButton: true,
-                    confirmButtonText: 'Update Data',
-                    cancelButtonText: 'Cancel',
-                    preConfirm: () => {
-                        const updatedProductName = document.getElementById('editProductName').value;
-                        const updatedCategory = document.getElementById('editCategory').value;
-                        const updatedStock = document.getElementById('editStock').value;
-                        const updatedPrice = document.getElementById('editPrice').value;
+                            if (!updatedProductName || !updatedCategory || !updatedStock || !updatedPrice || !updatedImage) {
+                                Swal.showValidationMessage('Please fill in all fields');
+                            }
 
-                        if (!updatedProductName || !updatedCategory || !updatedStock || !updatedPrice) {
-                            Swal.showValidationMessage('Please fill in all fields');
+                            return { id, updatedProductName, updatedCategory, updatedStock, updatedPrice, updatedImage };
                         }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const { id, updatedProductName, updatedCategory, updatedStock, updatedPrice, updatedImage } = result.value;
 
-                        return { updatedProductName, updatedCategory, updatedStock, updatedPrice };
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const { updatedProductName, updatedCategory, updatedStock, updatedPrice } = result.value;
-
-                        // Update the product data in the table
-                        cells[0].innerText = updatedProductName;
-                        cells[2].innerText = updatedCategory;
-                        cells[3].innerText = updatedStock;
-                        cells[4].innerText = 'Rp ' + updatedPrice.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Format price
-
-                        Swal.fire('Product Updated!', '', 'success');
-                    } else if (result.isDismissed) {
-                        console.log('Popup exited without updating.');
-                    }
+                            fetch('products_backend.php', {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ id, name: updatedProductName, category: updatedCategory, stock: updatedStock, price: updatedPrice, image: updatedImage })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    Swal.fire('Product Updated!', '', 'success');
+                                    fetchProducts(); // Refresh the product list
+                                }
+                            });
+                        }
+                    });
                 });
             }
         });

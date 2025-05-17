@@ -20,9 +20,9 @@
         <ul class="side-menu">
             <li><a href="index.html" class="active"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
             <li>
-                <a href="orders.html"><i class='bx bxs-inbox icon'></i> Orders <i></i></a>
+                <a href="orders.html"><i class='bx bxs-inbox icon'></i> Pesanan</a>
             </li>
-            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Products </a></li>
+            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Produk</a></li>
             <li class="divider"></li>
             <li class="profile">
                 <div class="profile-details">
@@ -46,7 +46,6 @@
             <ul class="breadcrumbs">
                 <li><a href="#">Home</a></li>
                 <li class="divider">/</li>
-                <li><a href="input-nilai.html" class="active">Input Nilai</a></li>
             </ul>
 
             <!-- Analyses Section -->
@@ -55,9 +54,9 @@
                     <div class="card sales">
                         <div class="status">
                             <div class="info">
-                                <h3>Total Order</h3>
+                                <h3>Pesanan Selesai</h3>
                                 <h1 id="totalOrder">0</h1>
-                                <button onclick="downloadReport()" class="more-btn">More</button>
+                                <button onclick="downloadReport()" class="more-btn">Unduh Laporan</button>
                             </div>
                             <div class="icon-box sales-icon">
                                 <span class="material-icons-sharp">monetization_on</span>
@@ -68,8 +67,9 @@
                     <div class="card visits">
                         <div class="status">
                             <div class="info">
-                                <h3>Site Visit</h3>
-                                <h1>24,981</h1>
+                                <h3>Pesanan Tervalidasi</h3>
+                                <h1 id="validatedOrderCount">0</h1>
+                                <button onclick="downloadReport()" class="more-btn">More</button>
                             </div>
                             <div class="icon-box visits-icon">
                                 <span class="material-icons-sharp">visibility</span>
@@ -80,8 +80,9 @@
                     <div class="card searches">
                         <div class="status">
                             <div class="info">
-                                <h3>Searches</h3>
+                                <h3>Produk Terjual</h3>
                                 <h1>14,147</h1>
+                                <button onclick="downloadReport()" class="more-btn">More</button>
                             </div>
                             <div class="icon-box searches-icon">
                                 <span class="material-icons-sharp">search</span>
@@ -107,30 +108,54 @@
                 <table class="styled-table">
                     <thead>
                         <tr>
+                            <th>No</th> <!-- Kolom nomor -->
+                            <th>Nama Customer</th>
                             <th>Nama Produk</th>
-                            <th>Kode Order</th>
-                            <th>Pembayaran</th>
-                            <th>Status</th>
+                            <th>Jumlah</th>
+                            <th>Total Harga</th>
+                            <th>Tanggal Pesan</th>
+                            <th>Status Pembayaran</th>
+                            <th>Status Validasi</th>
+                            <th>Status Pemesanan</th>
+                            <th class="actions">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-status="completed">
+                        <tr>
+                            <td>1</td> <!-- Nomor urut -->
+                            <td>John Doe</td>
                             <td>HTML & CSS Mastery</td>
-                            <td>#CS-001</td>
-                            <td>Paid</td>
-                            <td><span class="status completed">Completed</span></td>
+                            <td>1</td>
+                            <td>Rp 500.000</td>
+                            <td>2025-05-04</td>
+                            <td><span class="status completed">Sudah Bayar</span></td>
+                            <td><span class="status completed">Valid</span></td>
+                            <td><span class="status completed">Dikirim</span></td>
+                            <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
                         </tr>
-                        <tr data-status="pending">
+                        <tr>
+                            <td>2</td> <!-- Nomor urut -->
+                            <td>Jane Smith</td>
                             <td>JavaScript Basics</td>
-                            <td>#JS-002</td>
-                            <td>Pending</td>
-                            <td><span class="status pending">Pending</span></td>
+                            <td>1</td>
+                            <td>Rp 300.000</td>
+                            <td>2025-05-02</td>
+                            <td><span class="status pending">Belum Bayar</span></td>
+                            <td><span class="status pending">Invalid</span></td>
+                            <td><span class="status pending">Belum Dikirim</span></td>
+                            <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
                         </tr>
-                        <tr data-status="completed">
+                        <tr>
+                            <td>3</td> <!-- Nomor urut -->
+                            <td>Michael Brown</td>
                             <td>React for Beginners</td>
-                            <td>#RE-003</td>
-                            <td>Paid</td>
-                            <td><span class="status completed">Completed</span></td>
+                            <td>1</td>
+                            <td>Rp 400.000</td>
+                            <td>2025-05-01</td>
+                            <td><span class="status completed">Sudah Bayar</span></td>
+                            <td><span class="status completed">Valid</span></td>
+                            <td><span class="status completed">Dikirim</span></td>
+                            <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
                         </tr>
                         <!-- Add more rows as needed -->
                     </tbody>
@@ -156,8 +181,23 @@
             document.getElementById('totalOrder').innerText = totalOrders;
         }
 
-        // Call the function to update total orders on page load
+        function updateValidatedOrders() {
+            const rows = document.querySelectorAll('.recent-orders tbody tr');
+            let validatedOrders = 0;
+
+            rows.forEach(row => {
+                const validationStatus = row.querySelector('td:nth-child(7) span').innerText; // Get the status from the 7th column
+                if (validationStatus === 'Valid') {
+                    validatedOrders++;
+                }
+            });
+
+            document.getElementById('validatedOrderCount').innerText = validatedOrders; // Update the count
+        }
+
+        // Call the functions to update counts on page load
         updateTotalOrders();
+        updateValidatedOrders();
     </script>
 </body>
 </html>
