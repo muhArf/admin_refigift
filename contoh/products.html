@@ -57,22 +57,6 @@
             background-color: #e0e7ff; /* Light blue on hover */
         }
 
-        .status {
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-weight: 500;
-            color: white;
-            display: inline-block;
-        }
-
-        .status.valid {
-            background-color: #4CAF50; /* Green */
-        }
-
-        .status.invalid {
-            background-color: #FFC107; /* Yellow */
-        }
-
         .actions {
             text-align: center;
         }
@@ -259,7 +243,7 @@
                     <input type="text" id="category" class="swal2-input" placeholder="Kategori">
                     <input type="number" id="stock" class="swal2-input" placeholder="Stocks">
                     <input type="number" id="price" class="swal2-input" placeholder="Harga">
-                    <input type="text" id="image" class="swal2-input" placeholder="Gambar Produk URL">
+                    <input type="file" id="image" class="swal2-input" accept="image/jpeg">
                 `,
                 focusConfirm: false,
                 showCancelButton: true,
@@ -270,24 +254,28 @@
                     const category = document.getElementById('category').value;
                     const stock = document.getElementById('stock').value;
                     const price = document.getElementById('price').value;
-                    const image = document.getElementById('image').value;
+                    const imageFile = document.getElementById('image').files[0];
 
-                    if (!productName || !category || !stock || !price || !image) {
+                    if (!productName || !category || !stock || !price || !imageFile) {
                         Swal.showValidationMessage('Please fill in all fields');
                     }
 
-                    return { productName, category, stock, price, image };
+                    return { productName, category, stock, price, imageFile };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const { productName, category, stock, price, image } = result.value;
+                    const { productName, category, stock, price, imageFile } = result.value;
+
+                    const formData = new FormData();
+                    formData.append('name', productName);
+                    formData.append('category', category);
+                    formData.append('stock', stock);
+                    formData.append('price', price);
+                    formData.append('image', imageFile);
 
                     fetch('products_backend.php', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ name: productName, category, stock, price, image })
+                        body: formData
                     })
                     .then(response => response.json())
                     .then(data => {

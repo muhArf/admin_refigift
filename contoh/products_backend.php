@@ -50,18 +50,31 @@ function fetch_products($conn) {
 }
 
 function add_product($conn) {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $name = $data['name'];
-    $category = $data['category'];
-    $stock = $data['stock'];
-    $price = $data['price'];
-    $image = $data['image']; // Assume image is a URL or path
+    $name = $_POST['name'];
+    $category = $_POST['category'];
+    $stock = $_POST['stock'];
+    $price = $_POST['price'];
 
-    $stmt = $conn->prepare("INSERT INTO products (name, category, stock, price, image) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssids", $name, $category, $stock, $price, $image);
-    $stmt->execute();
+    // Handle image upload
+    $image = $_FILES['image'];
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($image["name"]);
+    
+    // Check if the image is a valid JPG file
+    if ($image['type'] == 'image/jpeg') {
+        if (move_uploaded_file($image["tmp_name"], $target_file)) {
+            // Save the product to the database
+            $stmt = $conn->prepare("INSERT INTO products (name, category, stock, price, image) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssids", $name, $category, $stock, $price, $target_file);
+            $stmt->execute();
 
-    echo json_encode(['status' => 'success', 'id' => $stmt->insert_id]);
+            echo json_encode(['status' => 'success', 'id' => $stmt->insert_id]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Image upload failed']);
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Only JPG files are allowed']);
+    }
 }
 
 function update_product($conn) {
