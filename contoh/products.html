@@ -393,6 +393,27 @@
                 });
             }
         });
+
+        // Add event listener for search input
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const productsTable = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
+            
+            // Get all rows in the table
+            const rows = productsTable.getElementsByTagName('tr');
+            
+            // Loop through all rows and hide those that don't match the search term
+            for (let i = 0; i < rows.length; i++) {
+                const productName = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+                const productCategory = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
+                
+                if (productName.includes(searchTerm) || productCategory.includes(searchTerm)) {
+                    rows[i].style.display = ""; // Show the row
+                } else {
+                    rows[i].style.display = "none"; // Hide the row
+                }
+            }
+        });
     </script>
 </body>
 </html>
