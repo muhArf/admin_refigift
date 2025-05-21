@@ -1,307 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin | Refi Gift</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .breadcrumb {
-      margin: 10px 0 20px;
-      font-size: 14px;
-      color: #555;
-    }
-  
-    .breadcrumb a {
-      color: #007bff;
-      text-decoration: none;
-    }
-  
-    .breadcrumb a:hover {
-      text-decoration: underline;
-    }
-  
-    .more-btn {
-      margin-top: 10px;
-      padding: 6px 12px;
-      font-size: 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  
-    .more-btn:hover {
-      background-color: #0056b3;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="ADMIN_REFIGIFT/logo.jpg" type="image/png">
+    <title>Refi Gift | Admin</title>
 </head>
-
 <body>
-  <div class="container">
-
-    <!-- Sidebar Section -->
-    <aside>
-      <div class="toggle">
-        <div class="logo">
-          <img src="images/logo.png" alt="Logo" />
-          <h2>Refi<span class="danger">Gift</span></h2>
-        </div>
-        <div class="close" id="close-btn">
-          <span class="material-icons-sharp">close</span>
-        </div>
-      </div>
-
-      <div class="sidebar">
-        <a href="index.html" class="active"> <!-- Link ke Dashboard -->
-          <span class="material-icons-sharp">dashboard</span>
-          <h3>Dashboard</h3>
-        </a>
-        <a href="order.html"> <!-- Link ke Orders -->
-          <span class="material-icons-sharp">receipt_long</span>
-          <h3>Orders</h3>
-        </a>
-        <a href="products.html"> <!-- Link ke Products -->
-          <span class="material-icons-sharp">inventory</span>
-          <h3>Products</h3>
-        </a>
-        <a href="logout.html"> <!-- Link ke Logout -->
-          <span class="material-icons-sharp">logout</span>
-          <h3>Logout</h3>
-        </a>
-      </div>
-    </aside>
-    <!-- End of Sidebar Section -->
-
-    <!-- Main Content -->
-    <main>
-      <h1>Dashboard</h1>
-
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb" id="breadcrumb"></nav>
-
-
-      <div class="wrapper-card" >
-          <!-- Analyses Section -->
-          <div class="analyse">
-            <div class="sales">
-              <div class="status">
-                <div class="info">
-                  <h3>Total Order</h3>
-                  <h1 id="totalOrder">1,200</h1>
-                  <button onclick="downloadReport()" class="more-btn">More</button>
-                </div>
-                <div class="progresss">
-                  <div class="percentage">
-                    <span class="material-icons-sharp icon-box sales-icon">monetization_on</span>
-                  </div>
-                </div>
-              </div>
-            </div>
     
-            <div class="visits">
-              <div class="status">
-                <div class="info">
-                  <h3>Site Visit</h3>
-                  <h1>24,981</h1>
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="index.html" class="brand">
+            <img src="images/logo.svg" alt="Logo" style="height: 30px; margin-right: 10px;">
+            E-Admin
+        </a>
+        <ul class="side-menu">
+            <li><a href="index.html" class="active"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
+            <li>
+                <a href="orders.html"><i class='bx bxs-inbox icon'></i> Pesanan</a>
+            </li>
+            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Produk</a></li>
+            <li class="divider"></li>
+            <li class="profile">
+                <div class="profile-details">
+                    <img src="images/profile-1.jpeg" alt="profileImg" />
+                    <div class="name_job">
+                        <div class="name">RefiGift</div>
+                        <div class="job">Admin</div>
+                    </div>
+                    <a href="#" class="logout-btn">
+                        <i class='bx bx-log-out' id="log_out"></i>
+                    </a>
                 </div>
-                <div class="progresss">
-                  <div class="percentage">
-                    <span class="material-icons-sharp icon-box visits-icon">visibility</span>
-                  </div>
+            </li>
+        </ul>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <section id="content">
+        <main>
+            <h1 class="title">Dashboard</h1>
+            <ul class="breadcrumbs">
+                <li><a href="#">Home</a></li>
+                <li class="divider">/</li>
+            </ul>
+
+            <!-- Analyses Section -->
+            <div class="wrapper-card">
+                <div class="analyse">
+                    <div class="card sales">
+                        <div class="status">
+                            <div class="info">
+                                <h3>Pesanan Selesai</h3>
+                                <h1 id="totalOrder">0</h1>
+                                <button onclick="downloadReport()" class="more-btn">Unduh Laporan</button>
+                            </div>
+                            <div class="icon-box sales-icon">
+                                <span class="material-icons-sharp">check_circle</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card visits">
+                        <div class="status">
+                            <div class="info">
+                                <h3>Pesanan Tervalidasi</h3>
+                                <h1 id="validatedOrderCount">0</h1>
+                                <button onclick="downloadReport()" class="more-btn">More</button>
+                            </div>
+                            <div class="icon-box visits-icon">
+                                <span class="material-icons-sharp">verified</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card searches">
+                        <div class="status">
+                            <div class="info">
+                                <h3>Produk Terjual</h3>
+                                <h1>14,147</h1>
+                                <button onclick="downloadReport()" class="more-btn">More</button>
+                            </div>
+                            <div class="icon-box searches-icon">
+                                <span class="material-icons-sharp">shopping_cart</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-    
-            <div class="searches">
-              <div class="status">
-                <div class="info">
-                  <h3>Searches</h3>
-                  <h1>14,147</h1>
+            <!-- End of Analyses Section -->
+
+            <!-- Recent Orders Table -->
+            <div class="orders recent-orders">
+                <div class="header">
+                    <h3>Recent Order</h3>
+                    <div class="filter">
+                        <select>
+                            <option>Today</option>
+                            <option>This Week</option>
+                            <option>This Month</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="progresss">
-                  <div class="percentage">
-                    <span class="material-icons-sharp icon-box searches-icon">search</span>
-                  </div>
-                </div>
-              </div>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>No</th> <!-- Kolom nomor -->
+                            <th>Nama Customer</th>
+                            <th>Nama Produk</th>
+                            <th>Jumlah</th>
+                            <th>Total Harga</th>
+                            <th>Tanggal Pesan</th>
+                            <th>Status Pembayaran</th>
+                            <th>Status Validasi</th>
+                            <th>Status Pemesanan</th>
+                            <th class="actions">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Data pesanan akan diisi secara dinamis -->
+                    </tbody>
+                </table>
             </div>
-          </div>
-          <!-- End of Analyses Section -->
-      </div>
+            <!-- End of Recent Orders Table -->
 
-      <!-- Recent Orders Table -->
-      <div class="orders recent-orders">
-        <div class="header">
-          <h3>Recent Orders</h3>
-        </div>
-        <table class="styled-table">
-          <thead>
-            <tr>
-              <th>Product Image</th>
-              <th>Course Name</th>
-              <th>Course Number</th>
-              <th>Payment</th>
-              <th>Status</th>
-              <th>Status</th>
-              <th>Status</th>
-              <th>Status</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><img src="images/product1.jpg" alt="HTML & CSS Mastery" class="product-img" /></td>
-              <td>HTML & CSS Mastery</td>
-              <td>#CS-001</td>
-              <td>Paid</td>
-              <td><span class="status completed">Completed</span></td>
-              <td class="details"><a href="#">Details</a></td>
-            </tr>
-            <tr>
-              <td><img src="images/product2.jpg" alt="JavaScript Fundamentals" class="product-img" /></td>
-              <td>JavaScript Fundamentals</td>
-              <td>#CS-002</td>
-              <td>Pending</td>
-              <td><span class="status pending">Pending</span></td>
-              <td class="details"><a href="#">Details</a></td>
-            </tr>
-            <tr>
-              <td><img src="images/product3.jpg" alt="React Development" class="product-img" /></td>
-              <td>React Development</td>
-              <td>#CS-003</td>
-              <td>Paid</td>
-              <td><span class="status processing">Processing</span></td>
-              <td class="details"><a href="#">Details</a></td>
-            </tr>
-          </tbody>
-        </table>
-        <a href="#" class="show-all">Show All</a>
-      </div>
-      <!-- End of Recent Orders Table -->
-    </main>
-    <!-- End of Main Content -->
+        </main>
+    </section>
 
-    <!-- Right Section -->
-    <div class="right-section">
-      <div class="nav">
-        <button id="menu-btn">
-          <span class="material-icons-sharp">menu</span>
-        </button>
-        <div class="profile">
-          <div class="info">
-            <p>Hey, <b>RefiGift</b></p>
-            <small class="text-muted">Admin</small>
-          </div>
-          <div class="profile-photo">
-            <img src="images/profile-1.jpg" alt="Profile Photo" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End of Right Section -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        // Function to fetch orders from backend
+        function fetchOrders() {
+            fetch('orders_backend.php', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const ordersTableBody = document.getElementById('ordersTableBody');
+                ordersTableBody.innerHTML = ''; // Clear existing rows
+                data.forEach((order, index) => {
+                    const newRow = ordersTableBody.insertRow();
+                    newRow.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${order.customer_name}</td>
+                        <td>${order.product_name}</td>
+                        <td>${order.jumlah}</td>
+                        <td>Rp ${parseFloat(order.total_harga).toFixed(2)}</td>
+                        <td>${order.tanggal_order}</td>
+                        <td><span class="status ${order.status_pembayaran === 'completed' ? 'completed' : 'pending'}">${order.status_pembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
+                        <td><span class="status ${order.status_validasi === 'completed' ? 'completed' : 'pending'}">${order.status_validasi === 'completed' ? 'Valid' : 'Invalid'}</span></td>
+                        <td><span class="status ${order.status_pemesanan === 'completed' ? 'completed' : 'pending'}">${order.status_pemesanan === 'completed' ? 'Dikirim' : 'Belum Dikirim'}</span></td>
+                        <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
+                    `;
+                });
+            })
+            .catch(error => console.error('Error fetching orders:', error));
+        }
 
-  </div>
-  <!-- End of Container -->
+        // Call fetchOrders on page load
+        document.addEventListener('DOMContentLoaded', fetchOrders);
 
-  <!-- Scripts -->
-  <script src="orders.js"></script>
-  <script src="index.js"></script>
+        function updateTotalOrders() {
+            const rows = document.querySelectorAll('.recent-orders tbody tr');
+            let totalOrders = 0;
 
-  <script>
-    const menuLinks = document.querySelectorAll('.sidebar a');
-    const breadcrumb = document.getElementById('breadcrumb');
+            rows.forEach(row => {
+                if (row.dataset.status === 'completed') {
+                    totalOrders++;
+                }
+            });
 
-    function updateBreadcrumb(activeLink) {
-      const section = activeLink.querySelector('h3').innerText;
+            document.getElementById('totalOrder').innerText = totalOrders;
+        }
 
-      breadcrumb.innerHTML = `
-        <a href="#">Home</a> &gt;
-        <a href="#">Admin</a> &gt;
-        <span>${section}</span>
-      `;
-    }
+        function updateValidatedOrders() {
+            const rows = document.querySelectorAll('.recent-orders tbody tr');
+            let validatedOrders = 0;
 
-    menuLinks.forEach(link => {
-      link.addEventListener('click', function (e) {
-        menuLinks.forEach(item => item.classList.remove('active'));
-        this.classList.add('active');
-        updateBreadcrumb(this);
-      });
-    });
+            rows.forEach(row => {
+                const validationStatus = row.querySelector('td:nth-child(7) span').innerText; // Get the status from the 7th column
+                if (validationStatus === 'Valid') {
+                    validatedOrders++;
+                }
+            });
 
-    // Set breadcrumb saat pertama kali halaman dimuat
-    const initialActive = document.querySelector('.sidebar a.active');
-    if (initialActive) updateBreadcrumb(initialActive);
-  </script>
-  <!-- jsPDF CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+            document.getElementById('validatedOrderCount').innerText = validatedOrders; // Update the count
+        }
 
-<script>
-  async function downloadReport() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    const totalOrder = document.getElementById("totalOrder").innerText;
-    const currentDate = new Date().toLocaleString();
-
-    doc.setFontSize(18);
-    doc.text("Laporan Penjualan", 14, 20);
-
-    doc.setFontSize(12);
-    doc.text(`Tanggal: ${currentDate}`, 14, 30);
-    doc.text(`Total Order: ${totalOrder}`, 14, 37);
-
-    const tableRows = document.querySelectorAll(".recent-orders tbody tr");
-    const filteredData = [];
-    let index = 1;
-
-    tableRows.forEach(row => {
-      const cells = row.querySelectorAll("td");
-      const statusText = cells[4].innerText.trim();
-
-      if (statusText.toLowerCase() === "completed") {
-        const productName = cells[1].innerText.trim();
-        const orderCode = cells[2].innerText.trim();
-        const paymentStatus = cells[3].innerText.trim();
-        const shippingStatus = cells[4].innerText.trim();
-
-        filteredData.push([
-          index.toString(),
-          productName,
-          orderCode,
-          paymentStatus,
-          shippingStatus
-        ]);
-
-        index++;
-      }
-    });
-
-    if (filteredData.length === 0) {
-      doc.text("Tidak ada data dengan status 'Completed'.", 14, 50);
-    } else {
-      doc.autoTable({
-        head: [["No", "Nama Produk", "Kode Order", "Pembayaran", "Status"]],
-        body: filteredData,
-        startY: 45,
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [0, 123, 255] }
-      });
-    }
-
-    doc.save("laporan-penjualan.pdf");
-  }
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-
-
+        // Call the functions to update counts on page load
+        updateTotalOrders();
+        updateValidatedOrders();
+    </script>
 </body>
-
 </html>
