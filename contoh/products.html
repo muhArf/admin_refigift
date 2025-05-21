@@ -202,12 +202,16 @@
             fetch('products_backend.php', {
                 method: 'GET'
             })
+<<<<<<< HEAD
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
+=======
+            .then(response => response.json())
+>>>>>>> f304a262b3158fe716b5d9df3b6cd87a847c7a82
             .then(data => {
                 const productsTable = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
                 productsTable.innerHTML = ''; // Clear existing rows
@@ -225,8 +229,12 @@
                         </td>
                     `;
                 });
+<<<<<<< HEAD
             })
             .catch(error => console.error('Error fetching products:', error));
+=======
+            });
+>>>>>>> f304a262b3158fe716b5d9df3b6cd87a847c7a82
         }
 
         // Call fetchProducts on page load
@@ -275,21 +283,30 @@
                         method: 'POST',
                         body: formData
                     })
+<<<<<<< HEAD
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
                         }
                         return response.json();
                     })
+=======
+                    .then(response => response.json())
+>>>>>>> f304a262b3158fe716b5d9df3b6cd87a847c7a82
                     .then(data => {
                         if (data.status === 'success') {
                             Swal.fire('Product Added!', '', 'success');
                             fetchProducts(); // Refresh the product list
+<<<<<<< HEAD
                         } else {
                             Swal.fire('Error!', data.message, 'error');
                         }
                     })
                     .catch(error => console.error('Error adding product:', error));
+=======
+                        }
+                    });
+>>>>>>> f304a262b3158fe716b5d9df3b6cd87a847c7a82
                 }
             });
         });
@@ -398,24 +415,33 @@
                             },
                             body: JSON.stringify({ id })
                         })
+<<<<<<< HEAD
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Network response was not ok');
                             }
                             return response.json();
                         })
+=======
+                        .then(response => response.json())
+>>>>>>> f304a262b3158fe716b5d9df3b6cd87a847c7a82
                         .then(data => {
                             if (data.status === 'success') {
                                 Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
                                 fetchProducts(); // Refresh the product list
                             }
+<<<<<<< HEAD
                         })
                         .catch(error => console.error('Error deleting product:', error));
+=======
+                        });
+>>>>>>> f304a262b3158fe716b5d9df3b6cd87a847c7a82
                     }
                 });
             }
         });
 
+<<<<<<< HEAD
         // Add event listener for search input
         document.getElementById('searchInput').addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
@@ -426,6 +452,97 @@
                 const productName = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
                 const productCategory = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
 
+                if (productName.includes(searchTerm) || productCategory.includes(searchTerm)) {
+                    rows[i].style.display = ""; // Show the row
+                } else {
+                    rows[i].style.display = "none"; // Hide the row
+                }
+=======
+        // Add event listener for edit buttons
+        document.getElementById('productsTable').addEventListener('click', function(event) {
+            if (event.target.classList.contains('edit-btn')) {
+                event.preventDefault();
+                const id = event.target.dataset.id;
+
+                // Fetch product details for editing
+                fetch(`products_backend.php?id=${id}`, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(product => {
+                    const imageUrl = product.image ? product.image : ''; // Ensure image URL is defined
+                    Swal.fire({
+                        title: 'Edit Produk',
+                        html: `
+                            <input type="text" id="editProductName" class="swal2-input" placeholder="Nama Produk" value="${product.name || ''}">
+                            <input type="text" id="editCategory" class="swal2-input" placeholder="Kategori" value="${product.category || ''}">
+                            <input type="number" id="editStock" class="swal2-input" placeholder="Stocks" value="${product.stock || ''}">
+                            <input type="number" id="editPrice" class="swal2-input" placeholder="Harga" value="${product.price || ''}">
+                            <input type="file" id="editImage" class="swal2-input" accept="image/jpeg">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${product.name}" style="width: 100px; margin-top: 10px;">` : ''}
+                        `,
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: 'Update Data',
+                        cancelButtonText: 'Cancel',
+                        preConfirm: () => {
+                            const updatedProductName = document.getElementById('editProductName').value;
+                            const updatedCategory = document.getElementById('editCategory').value;
+                            const updatedStock = document.getElementById('editStock').value;
+                            const updatedPrice = document.getElementById('editPrice').value;
+                            const updatedImage = document.getElementById('editImage').files[0];
+
+                            if (!updatedProductName || !updatedCategory || !updatedStock || !updatedPrice) {
+                                Swal.showValidationMessage('Please fill in all fields');
+                            }
+
+                            return { id, updatedProductName, updatedCategory, updatedStock, updatedPrice, updatedImage };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const { id, updatedProductName, updatedCategory, updatedStock, updatedPrice, updatedImage } = result.value;
+
+                            const formData = new FormData();
+                            formData.append('id', id);
+                            formData.append('name', updatedProductName);
+                            formData.append('category', updatedCategory);
+                            formData.append('stock', updatedStock);
+                            formData.append('price', updatedPrice);
+                            if (updatedImage) {
+                                formData.append('image', updatedImage); // Include new image if provided
+                            }
+
+                            fetch('products_backend.php', {
+                                method: 'PUT',
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    Swal.fire('Product Updated!', '', 'success');
+                                    fetchProducts(); // Refresh the product list
+                                }
+                            });
+                        }
+                    });
+                });
+>>>>>>> f304a262b3158fe716b5d9df3b6cd87a847c7a82
+            }
+        });
+
+        // Add event listener for search input
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const productsTable = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
+            
+            // Get all rows in the table
+            const rows = productsTable.getElementsByTagName('tr');
+            
+            // Loop through all rows and hide those that don't match the search term
+            for (let i = 0; i < rows.length; i++) {
+                const productName = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+                const productCategory = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
+                
                 if (productName.includes(searchTerm) || productCategory.includes(searchTerm)) {
                     rows[i].style.display = ""; // Show the row
                 } else {
