@@ -59,7 +59,7 @@
                                 <button onclick="downloadReport()" class="more-btn">Unduh Laporan</button>
                             </div>
                             <div class="icon-box sales-icon">
-                                <span class="material-icons-sharp">monetization_on</span>
+                                <span class="material-icons-sharp">check_circle</span>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                                 <button onclick="downloadReport()" class="more-btn">More</button>
                             </div>
                             <div class="icon-box visits-icon">
-                                <span class="material-icons-sharp">visibility</span>
+                                <span class="material-icons-sharp">verified</span>
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                                 <button onclick="downloadReport()" class="more-btn">More</button>
                             </div>
                             <div class="icon-box searches-icon">
-                                <span class="material-icons-sharp">search</span>
+                                <span class="material-icons-sharp">shopping_cart</span>
                             </div>
                         </div>
                     </div>
@@ -120,44 +120,8 @@
                             <th class="actions">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td> <!-- Nomor urut -->
-                            <td>John Doe</td>
-                            <td>HTML & CSS Mastery</td>
-                            <td>1</td>
-                            <td>Rp 500.000</td>
-                            <td>2025-05-04</td>
-                            <td><span class="status completed">Sudah Bayar</span></td>
-                            <td><span class="status completed">Valid</span></td>
-                            <td><span class="status completed">Dikirim</span></td>
-                            <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
-                        </tr>
-                        <tr>
-                            <td>2</td> <!-- Nomor urut -->
-                            <td>Jane Smith</td>
-                            <td>JavaScript Basics</td>
-                            <td>1</td>
-                            <td>Rp 300.000</td>
-                            <td>2025-05-02</td>
-                            <td><span class="status pending">Belum Bayar</span></td>
-                            <td><span class="status pending">Invalid</span></td>
-                            <td><span class="status pending">Belum Dikirim</span></td>
-                            <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td> <!-- Nomor urut -->
-                            <td>Michael Brown</td>
-                            <td>React for Beginners</td>
-                            <td>1</td>
-                            <td>Rp 400.000</td>
-                            <td>2025-05-01</td>
-                            <td><span class="status completed">Sudah Bayar</span></td>
-                            <td><span class="status completed">Valid</span></td>
-                            <td><span class="status completed">Dikirim</span></td>
-                            <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
-                        </tr>
-                        <!-- Add more rows as needed -->
+                    <tbody id="ordersTableBody">
+                        <!-- Data pesanan akan diisi secara dinamis -->
                     </tbody>
                 </table>
             </div>
@@ -168,6 +132,42 @@
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
+        // Function to fetch orders from backend
+        function fetchOrders() {
+            fetch('orders_backend.php', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const ordersTableBody = document.getElementById('ordersTableBody');
+                ordersTableBody.innerHTML = ''; // Clear existing rows
+                data.forEach((order, index) => {
+                    const newRow = ordersTableBody.insertRow();
+                    newRow.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${order.customer_name}</td>
+                        <td>${order.product_name}</td>
+                        <td>${order.jumlah}</td>
+                        <td>Rp ${parseFloat(order.total_harga).toFixed(2)}</td>
+                        <td>${order.tanggal_order}</td>
+                        <td><span class="status ${order.status_pembayaran === 'completed' ? 'completed' : 'pending'}">${order.status_pembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
+                        <td><span class="status ${order.status_validasi === 'completed' ? 'completed' : 'pending'}">${order.status_validasi === 'completed' ? 'Valid' : 'Invalid'}</span></td>
+                        <td><span class="status ${order.status_pemesanan === 'completed' ? 'completed' : 'pending'}">${order.status_pemesanan === 'completed' ? 'Dikirim' : 'Belum Dikirim'}</span></td>
+                        <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
+                    `;
+                });
+            })
+            .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        // Call fetchOrders on page load
+        document.addEventListener('DOMContentLoaded', fetchOrders);
+
         function updateTotalOrders() {
             const rows = document.querySelectorAll('.recent-orders tbody tr');
             let totalOrders = 0;
