@@ -269,8 +269,8 @@
                 html: `
                     <input type="text" id="customerName" class="swal2-input" placeholder="Customer Name">
                     <input type="text" id="productName" class="swal2-input" placeholder="Nama Produk">
-                    <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah">
-                    <input type="text" id="totalHarga" class="swal2-input" placeholder="Total Harga">
+                    <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                    <input type="number" id="totalHarga" class="swal2-input" placeholder="Total Harga" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                     <input type="date" id="tanggalOrder" class="swal2-input" value="${getTodayDate()}">
                     <div class="radio-container">
                         <strong>Status Pembayaran:</strong>
