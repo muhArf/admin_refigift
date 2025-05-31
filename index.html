@@ -8,6 +8,19 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="ADMIN_REFIGIFT/logo.jpg" type="image/png">
     <title>Refi Gift | Admin</title>
+    <style>
+        /* Add this style to align the logout icon */
+        .logout-btn {
+            display: flex;
+            justify-content: flex-end; /* Aligns the icon to the right */
+            padding: 10px; /* Add some padding */
+        }
+        .logout-btn i {
+            font-size: 24px; /* Adjust icon size */
+            color: #ff4d4d; /* Change icon color (optional) */
+            margin-left: 50px; /* Move the icon further to the right */
+        }
+    </style>
 </head>
 <body>
     
@@ -26,13 +39,12 @@
             <li class="divider"></li>
             <li class="profile">
                 <div class="profile-details">
-                    <img src="images/profile-1.jpeg" alt="profileImg" />
                     <div class="name_job">
-                        <div class="name">RefiGift</div>
-                        <div class="job">Admin</div>
+                        <div class="name">Admin</div>
+                        <div class="job">Administrator</div> <!-- Keterangan Administrator ditambahkan di sini -->
                     </div>
                     <a href="#" class="logout-btn">
-                        <i class='bx bx-log-out' id="log_out"></i>
+                        <i class='bx bx-log-out' id="log_out"></i> <!-- Removed "Logout" text -->
                     </a>
                 </div>
             </li>

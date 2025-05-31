@@ -25,6 +25,8 @@ switch ($request_method) {
         break;
     case 'POST':
         add_order($conn);
+        error_log("Customer Name: $customerName, Product Name: $productName, Jumlah: $jumlah, Total Harga: $totalHarga, Tanggal Order: $tanggalOrder, Status Pembayaran: $statusPembayaran, Status Validasi: $statusValidasi, Status Pemesanan: $statusPemesanan");
+
         break;
     case 'DELETE':
         delete_order($conn);

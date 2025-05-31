@@ -14,9 +14,10 @@
   --dark: #000;
   --green: #81D43A;
   --light-green: #E3FFCB;
-  --blue: #1775F1;
-  --light-blue: #D0E4FF;
-  --dark-blue: #0C5FCD;
+  --blue: #60B5FF;
+  --light-blue: #AFDDFF;
+  --dark-primary: #B6B09F;
+  --button-primary: #EAE4D5;
   --red: #FC3B56;
 }
 
@@ -119,8 +120,8 @@ li {
 }
 #sidebar .side-menu > li > a.active,
 #sidebar .side-menu > li > a.active:hover {
-  background: var(--blue);
-  color: var(--light);
+  background: var(--button-primary);
+  color: var(--dark);
 }
 #sidebar .divider {
   margin-top: 24px;
@@ -441,12 +442,12 @@ table td img.product-img {
 .profile-details {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   gap: 10px;
   background: #f1f1f1;
   padding: 10px;
   border-radius: 10px;
-  text-align: center;
+  text-align: left;
 }
 
 .profile-details img {
@@ -458,8 +459,9 @@ table td img.product-img {
 
 .name_job {
   display: flex;
+  margin-left: 3px; /* Geser tulisan ke kanan */
   flex-direction: column;
-  align-items: center;
+  align-items: left;
 }
 
 .name_job .name {
@@ -567,11 +569,6 @@ table td img.product-img {
 }
 
 
-.styled-table th {
-    background-color: var(--blue);
-    color: white;
-}
-
 .styled-table tr:hover {
     background-color: var(--light-blue);
 }
@@ -618,7 +615,7 @@ table td img.product-img {
 
 
 .styled-table th {
-    background-color: var(--blue);
+    background-color: var(--dark-primary);
     color: white;
 }
 
@@ -709,7 +706,7 @@ table td img.product-img {
 
 .icon-box span {
   font-size: 32px;
-  color: var(--blue);
+  color: #67AE6E;
 }
 
 /* Specific Icon Colors (optional) */
@@ -811,17 +808,6 @@ table td img.product-img {
 }
 
 /* Icon Box Styling */
-.icon-box {
-  background-color: var(--light-blue);
-  padding: 12px; /* Adjusted padding */
-  border-radius: 10px; /* Slightly smaller radius */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 50px; /* Ensured a minimum width */
-  min-height: 50px; /* Ensured a minimum height */
-}
-
 .icon-box span {
   font-size: 22px; /* Adjusted icon size */
   color: var(--blue);
@@ -837,8 +823,8 @@ table td img.product-img {
 /* Button Styling */
 .more-btn {
     padding: 8px 18px; /* Increased padding for a larger button */
-    background-color: var(--blue); /* Button background color */
-    color: white; /* Text color */
+    background-color: var(--button-primary); /* Button background color */
+    color: var(--dark); /* Text color */
     border: none; /* No border */
     border-radius: 5px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
@@ -850,7 +836,7 @@ table td img.product-img {
 
 /* Button Hover Effect */
 .more-btn:hover {
-    background-color: var(--dark-blue); /* Darker background on hover */
+    background-color: var(--light-blue); /* Darker background on hover */
     transform: translateY(-2px); /* Slight lift effect */
 }
 
@@ -859,3 +845,4 @@ table td img.product-img {
 .card:hover {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
 }
+
