@@ -696,7 +696,7 @@ table td img.product-img {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%; /* Make the card take full width of its container */
-  max-width: 310px; /* Maximum width */
+  max-width: 350px; /* Maximum width */
   display: flex; /* Use flexbox for layout */
   justify-content: space-between; /* Space between elements */
   align-items: center; /* Center items vertically */
