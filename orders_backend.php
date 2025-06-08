@@ -25,8 +25,6 @@ switch ($request_method) {
         break;
     case 'POST':
         add_order($conn);
-        error_log("Customer Name: $customerName, Product Name: $productName, Jumlah: $jumlah, Total Harga: $totalHarga, Tanggal Order: $tanggalOrder, Status Pembayaran: $statusPembayaran, Status Validasi: $statusValidasi, Status Pemesanan: $statusPemesanan");
-
         break;
     case 'DELETE':
         delete_order($conn);
@@ -43,6 +41,9 @@ function fetch_orders($conn) {
     $orders = array();
 
     while ($row = $result->fetch_assoc()) {
+        // Format tanggal
+        $tanggal = new DateTime($row['tanggal_order']);
+        $row['tanggal_order'] = $tanggal->format('d F Y'); // Format: 08 Oktober 2025
         $orders[] = $row;
     }
 
@@ -55,13 +56,16 @@ function add_order($conn) {
     $productName = $_POST['productName'];
     $jumlah = $_POST['jumlah'];
     $totalHarga = $_POST['totalHarga'];
-    $tanggalOrder = $_POST['tanggalOrder'];
+    
+    // Hapus baris ini
+    // $tanggalOrder = date('Y-m-d'); // Tidak perlu lagi
+
     $statusPembayaran = $_POST['statusPembayaran'];
     $statusValidasi = $_POST['statusValidasi'];
     $statusPemesanan = $_POST['statusPemesanan'];
 
-    $stmt = $conn->prepare("INSERT INTO orders (customer_name, product_name, jumlah, total_harga, tanggal_order, status_pembayaran, status_validasi, status_pemesanan) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssisisss", $customerName, $productName, $jumlah, $totalHarga, $tanggalOrder, $statusPembayaran, $statusValidasi, $statusPemesanan);
+    $stmt = $conn->prepare("INSERT INTO orders (customer_name, product_name, jumlah, total_harga, tanggal_order, status_pembayaran, status_validasi, status_pemesanan) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)");
+    $stmt->bind_param("ssiisss", $customerName, $productName, $jumlah, $totalHarga, $statusPembayaran, $statusValidasi, $statusPemesanan);
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {

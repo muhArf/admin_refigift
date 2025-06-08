@@ -70,7 +70,6 @@
             text-decoration: none;
             font-weight: bold;
         }
-
         /* Custom styles for SweetAlert input fields */
         .swal2-input {
             border: 1px solid #ccc;
@@ -81,36 +80,30 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: border-color 0.3s;
         }
-
         .swal2-input:focus {
             border-color: #6c7ae0; /* Highlight border color on focus */
             outline: none; /* Remove default outline */
         }
-
         .swal2-title {
             font-size: 1.5em;
             color: #333;
         }
-
         .swal2-content {
             color: #555;
             margin-bottom: 10px; /* Add margin below content */
         }
-
         /* Styles for radio buttons */
         .radio-container {
             display: flex;
             flex-direction: column;
             margin: 10px 0;
         }
-
         .radio-container label {
             display: flex;
             align-items: center;
             margin: 5px 0;
             cursor: pointer;
         }
-
         .radio-container input[type="radio"] {
             margin-right: 10px;
             cursor: pointer;
@@ -139,7 +132,6 @@
                     </div>
                     <a href="#" class="logout-btn">
                         <i class='bx bx-log-out' style="font-size: 24px; color: #FFFF; margin-left: 90px;" id="log_out"></i>
-
                     </a>
                 </div>
             </li>
@@ -252,15 +244,6 @@
             }
         });
 
-        // Function to get today's date in YYYY-MM-DD format
-        function getTodayDate() {
-            const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-            const yyyy = today.getFullYear();
-            return `${yyyy}-${mm}-${dd}`;
-        }
-
         // Add event listener for the "Tambah Order" button
         document.getElementById('addOrderBtn').addEventListener('click', function() {
             Swal.fire({
@@ -270,7 +253,6 @@
                     <input type="text" id="productName" class="swal2-input" placeholder="Nama Produk">
                     <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                     <input type="number" id="totalHarga" class="swal2-input" placeholder="Total Harga" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                    <input type="date" id="tanggalOrder" class="swal2-input" value="${getTodayDate()}">
                     <div class="radio-container">
                         <strong>Status Pembayaran:</strong>
                         <label>
@@ -314,20 +296,19 @@
                     const productName = document.getElementById('productName').value;
                     const jumlah = document.getElementById('jumlah').value;
                     const totalHarga = document.getElementById('totalHarga').value;
-                    const tanggalOrder = document.getElementById('tanggalOrder').value;
                     const statusPembayaran = document.querySelector('input[name="statusPembayaran"]:checked') ? document.querySelector('input[name="statusPembayaran"]:checked').value : 'pending';
                     const statusValidasi = document.querySelector('input[name="statusValidasi"]:checked') ? document.querySelector('input[name="statusValidasi"]:checked').value : 'pending';
                     const statusPemesanan = document.querySelector('input[name="statusPemesanan"]:checked') ? document.querySelector('input[name="statusPemesanan"]:checked').value : 'pending';
 
-                    if (!customerName || !productName || !jumlah || !totalHarga || !tanggalOrder) {
+                    if (!customerName || !productName || !jumlah || !totalHarga) {
                         Swal.showValidationMessage('Please fill in all fields');
                     }
 
-                    return { customerName, productName, jumlah, totalHarga, tanggalOrder, statusPembayaran, statusValidasi, statusPemesanan };
+                    return { customerName, productName, jumlah, totalHarga, statusPembayaran, statusValidasi, statusPemesanan };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const { customerName, productName, jumlah, totalHarga, tanggalOrder, statusPembayaran, statusValidasi, statusPemesanan } = result.value;
+                    const { customerName, productName, jumlah, totalHarga, statusPembayaran, statusValidasi, statusPemesanan } = result.value;
 
                     // Kirim data ke backend
                     fetch('orders_backend.php', {
@@ -340,7 +321,6 @@
                             productName,
                             jumlah,
                             totalHarga,
-                            tanggalOrder,
                             statusPembayaran,
                             statusValidasi,
                             statusPemesanan,
