@@ -164,7 +164,7 @@
                         <td>${order.customer_name}</td>
                         <td>${order.product_name}</td>
                         <td>${order.jumlah}</td>
-                        <td>Rp ${parseFloat(order.total_harga).toFixed(2)}</td>
+                        <td>Rp ${parseFloat(order.total_harga).toFixed(3)}</td>
                         <td>${order.tanggal_order}</td>
                         <td><span class="status ${order.status_pembayaran === 'completed' ? 'completed' : 'pending'}">${order.status_pembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
                         <td><span class="status ${order.status_validasi === 'completed' ? 'completed' : 'pending'}">${order.status_validasi === 'completed' ? 'Valid' : 'Invalid'}</span></td>

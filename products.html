@@ -206,7 +206,7 @@
                         <td><img src="${product.image}" alt="${product.name}" style="width: 100px;"></td>
                         <td>${product.category}</td>
                         <td>${product.stock}</td>
-                        <td>Rp ${parseFloat(product.price).toFixed(2)}</td>
+                        <td>Rp ${parseFloat(product.price).toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</td>
                         <td class="actions">
                             <a href="#" class="edit-btn" data-id="${product.id}">Edit</a>
                             <a href="#" class="delete-btn" data-id="${product.id}">Delete</a>

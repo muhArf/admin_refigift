@@ -179,9 +179,27 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Get the search input and table
         const searchInput = document.getElementById('searchInput');
         const ordersTable = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+        let products = [];
+
+        // Function to fetch products from backend
+        function fetchProducts() {
+            fetch('products_backend.php', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                products = data; // Store products in a global variable
+            })
+            .catch(error => console.error('Error fetching products:', error));
+        }
+
+        // Call fetchProducts on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchOrders();
+            fetchProducts();
+        });
 
         // Function to fetch orders from backend
         function fetchOrders() {
@@ -203,7 +221,7 @@
                         <td>${order.customer_name}</td>
                         <td>${order.product_name}</td>
                         <td>${order.jumlah}</td>
-                        <td>Rp ${parseFloat(order.total_harga).toFixed(2)}</td>
+                        <td>Rp ${parseFloat(order.total_harga).toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</td>
                         <td>${order.tanggal_order}</td>
                         <td><span class="status ${order.status_pembayaran === 'completed' ? 'completed' : 'pending'}">${order.status_pembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
                         <td><span class="status ${order.status_validasi === 'completed' ? 'completed' : 'pending'}">${order.status_validasi === 'completed' ? 'Valid' : 'Invalid'}</span></td>
@@ -215,44 +233,20 @@
             .catch(error => console.error('Error fetching orders:', error));
         }
 
-        // Call fetchOrders on page load
-        document.addEventListener('DOMContentLoaded', fetchOrders);
-
-        // Add event listener for input on the search box
-        searchInput.addEventListener('keyup', function() {
-            const filter = searchInput.value.toLowerCase();
-            const rows = ordersTable.getElementsByTagName('tr');
-
-            // Loop through all table rows (except the first, which is the header)
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                let rowVisible = false;
-
-                // Loop through each cell in the row
-                for (let j = 0; j < cells.length; j++) {
-                    if (cells[j]) {
-                        const cellText = cells[j].textContent || cells[j].innerText;
-                        if (cellText.toLowerCase().indexOf(filter) > -1) {
-                            rowVisible = true; // If a match is found, set rowVisible to true
-                            break; // No need to check other cells in this row
-                        }
-                    }
-                }
-
-                // Show or hide the row based on the search
-                rows[i].style.display = rowVisible ? '' : 'none';
-            }
-        });
-
         // Add event listener for the "Tambah Order" button
         document.getElementById('addOrderBtn').addEventListener('click', function() {
+            const productOptions = products.map(product => `<option value="${product.name}" data-price="${product.price}">${product.name} - Rp ${parseFloat(product.price).toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</option>`).join('');
+
             Swal.fire({
                 title: 'Tambah Pesanan',
                 html: `
                     <input type="text" id="customerName" class="swal2-input" placeholder="Customer Name">
-                    <input type="text" id="productName" class="swal2-input" placeholder="Nama Produk">
-                    <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                    <input type="number" id="totalHarga" class="swal2-input" placeholder="Total Harga" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                    <select id="productName" class="swal2-input">
+                        <option value="" disabled selected>Pilih Produk</option>
+                        ${productOptions}
+                    </select>
+                    <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah" min="1" value="1" oninput="calculateTotal()">
+                    <input type="text" id="totalHarga" class="swal2-input" placeholder="Total Harga" readonly>
                     <div class="radio-container">
                         <strong>Status Pembayaran:</strong>
                         <label>
@@ -260,7 +254,7 @@
                             Sudah Bayar
                         </label>
                         <label>
-                            <input type="radio" name="statusPembayaran" value="pending">
+                            <input type="radio" name="statusPembayaran" value="pending" checked>
                             Belum Bayar
                         </label>
                     </div>
@@ -271,7 +265,7 @@
                             Valid
                         </label>
                         <label>
-                            <input type="radio" name="statusValidasi" value="pending">
+                            <input type="radio" name="statusValidasi" value="pending" checked>
                             Invalid
                         </label>
                     </div>
@@ -282,7 +276,7 @@
                             Dikirim
                         </label>
                         <label>
-                            <input type="radio" name="statusPemesanan" value="pending">
+                            <input type="radio" name="statusPemesanan" value="pending" checked>
                             Belum Dikirim
                         </label>
                     </div>
@@ -295,7 +289,7 @@
                     const customerName = document.getElementById('customerName').value;
                     const productName = document.getElementById('productName').value;
                     const jumlah = document.getElementById('jumlah').value;
-                    const totalHarga = document.getElementById('totalHarga').value;
+                    const totalHarga = document.getElementById('totalHarga').value.replace('Rp ', '').replace('.', '').replace(',', '.'); // Format totalHarga
                     const statusPembayaran = document.querySelector('input[name="statusPembayaran"]:checked') ? document.querySelector('input[name="statusPembayaran"]:checked').value : 'pending';
                     const statusValidasi = document.querySelector('input[name="statusValidasi"]:checked') ? document.querySelector('input[name="statusValidasi"]:checked').value : 'pending';
                     const statusPemesanan = document.querySelector('input[name="statusPemesanan"]:checked') ? document.querySelector('input[name="statusPemesanan"]:checked').value : 'pending';
@@ -344,6 +338,16 @@
                 }
             });
         });
+
+        // Function to calculate total price
+        function calculateTotal() {
+            const productSelect = document.getElementById('productName');
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const price = selectedOption ? parseFloat(selectedOption.getAttribute('data-price')) : 0;
+            const quantity = document.getElementById('jumlah').value;
+            const total = price * quantity;
+            document.getElementById('totalHarga').value = `Rp ${total.toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}`;
+        }
     </script>
 </body>
 </html>
