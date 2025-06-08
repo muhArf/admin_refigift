@@ -145,32 +145,31 @@ li {
 }
 
 .logout-btn {
-    display: flex; /* Use flexbox to align items */
-    align-items: center; /* Center items vertically */
-    padding: 12px 15px; /* Adjust padding for better spacing */
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    padding: 12px 20px; /* Padding tombol */
     text-decoration: none;
-    color: white;
-    background-color: #e74c3c;
-    border-radius: 8px;
-    margin: 10px 20px; /* Maintain vertical margin */
-    font-weight: bold;
-    transition: background-color 0.3s;
+    color: white; /* Mengubah warna teks menjadi putih */
+    background-color: #c0392b; /* Warna merah untuk tombol */
+    border-radius: 5px; /* Menambahkan sudut melengkung pada tombol */
+    transition: background-color 0.3s; /* Transisi halus untuk efek hover */
 }
 
 .logout-btn:hover {
-    background-color: #c0392b;
+    background-color: #a32c25; /* Warna merah yang lebih gelap saat hover */
 }
 
 .logout-btn .icon {
-    margin-right: 0; /* Remove right margin to bring text closer */
-    font-size: 18px; /* Icon size */
+    margin-right: 0; /* Tidak ada jarak antara ikon dan teks */
+    padding: 0; /* Menghapus padding pada ikon */
 }
 
-/* Optional: Adjust the font size of the text if necessary */
 .logout-btn span {
-    margin-left: 2px; /* Add a small margin to the left of the text */
-    font-size: 16px; /* Adjust the font size of the text */
+    font-size: 16px; /* Ukuran font teks */
+    margin-left: 0; /* Tidak ada margin di sebelah kiri teks */
 }
+
 
 
 /* CONTENT */
@@ -697,7 +696,7 @@ table td img.product-img {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%; /* Make the card take full width of its container */
-  max-width: 280px; /* Maximum width */
+  max-width: 310px; /* Maximum width */
   display: flex; /* Use flexbox for layout */
   justify-content: space-between; /* Space between elements */
   align-items: center; /* Center items vertically */
@@ -879,7 +878,7 @@ table td img.product-img {
 }
 
 .more-btn {
-    padding: 8px 16px; /* Padding for the button */
+    padding: 6px 12px; /* Padding for the button */
     background-color: var(--dark-primary); /* Button background color */
     color: var(--dark); /* Text color */
     border: none; /* No border */
