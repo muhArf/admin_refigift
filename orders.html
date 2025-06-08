@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         body {
-            background-color: #f0f4ff; /* Light blue background */
+            background-color: #F1F0F6; /* Light blue background */
             font-family: 'Open Sans', sans-serif;
         }
         .orders {
@@ -128,19 +128,18 @@
         <ul class="side-menu">
             <li><a href="index.html"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
             <li>
-                <a href="orders.html" class="active"><i class='bx bxs-inbox icon'></i> Pesanan <i></i></a>
+                <a href="orders.html" class="active"><i class='bx bxs-inbox icon'></i> Pesanan</a>
             </li>
-            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Produk </a></li>
+            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Produk</a></li>
             <li class="divider"></li>
             <li class="profile">
                 <div class="profile-details">
-                    <img src="images/profile-1.jpeg" alt="profileImg" />
                     <div class="name_job">
-                        <div class="name">RefiGift</div>
-                        <div class="job">Admin</div>
+                        <div class="name">Logout</div> <!-- Changed to "Logout" -->
                     </div>
                     <a href="#" class="logout-btn">
-                        <i class='bx bx-log-out' id="log_out"></i>
+                        <i class='bx bx-log-out' style="font-size: 24px; color: #FFFF; margin-left: 90px;" id="log_out"></i>
+
                     </a>
                 </div>
             </li>
@@ -155,7 +154,7 @@
             <!-- Order Table -->
             <div class="orders">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <button id="addOrderBtn" style="padding: 10px 20px; background-color: #6c7ae0; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    <button id="addOrderBtn" style="padding: 10px 20px; background-color: #D5C7A3; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Tambah Pesanan
                     </button>
                     <input type="text" id="searchInput" placeholder="Search..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 200px;">

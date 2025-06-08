@@ -18,7 +18,12 @@
   --light-blue: #AFDDFF;
   --dark-primary: #B6B09F;
   --button-primary: #EAE4D5;
+  --box-icon: #F2E2B1;
   --red: #FC3B56;
+  --total-orders-color: #2196f3; /* Blue for Total Orders */
+  --validated-orders-color: #81D43A; /* Green for Validated Orders */
+  --sold-products-color: #FFC107; /* Yellow for Sold Products */
+
 }
 
 html {
@@ -84,7 +89,7 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 6px;
+  margin-right: 15px;
 }
 #sidebar .icon-right {
   margin-left: auto;
@@ -138,6 +143,35 @@ li {
 #sidebar.hide .divider {
   text-align: center;
 }
+
+.logout-btn {
+    display: flex; /* Use flexbox to align items */
+    align-items: center; /* Center items vertically */
+    padding: 12px 15px; /* Adjust padding for better spacing */
+    text-decoration: none;
+    color: white;
+    background-color: #e74c3c;
+    border-radius: 8px;
+    margin: 10px 20px; /* Maintain vertical margin */
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+.logout-btn .icon {
+    margin-right: 0; /* Remove right margin to bring text closer */
+    font-size: 18px; /* Icon size */
+}
+
+/* Optional: Adjust the font size of the text if necessary */
+.logout-btn span {
+    margin-left: 2px; /* Add a small margin to the left of the text */
+    font-size: 16px; /* Adjust the font size of the text */
+}
+
 
 /* CONTENT */
 #content {
@@ -440,14 +474,9 @@ table td img.product-img {
 }
 
 .profile-details {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  gap: 10px;
-  background: #f1f1f1;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: left;
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center the button horizontally */
+    width: 100%; /* Ensure it takes full width */
 }
 
 .profile-details img {
@@ -459,7 +488,7 @@ table td img.product-img {
 
 .name_job {
   display: flex;
-  margin-left: 3px; /* Geser tulisan ke kanan */
+  margin-left: 1px; /* Geser tulisan ke kanan */
   flex-direction: column;
   align-items: left;
 }
@@ -467,18 +496,20 @@ table td img.product-img {
 .name_job .name {
   font-weight: 600;
   font-size: 14px;
+  color: #FFFFFF;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.name_job .name:hover {
+    color: #FFD700;
 }
 
 .name_job .job {
   font-size: 12px;
-  color: #888;
+  color: #ffffff;
 }
 
-.logout-btn {
-  color: #333;
-  text-decoration: none;
-  font-size: 20px;
-}
 
 
 .card {
@@ -492,11 +523,6 @@ table td img.product-img {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.status {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .info {
     text-align: left;
@@ -517,9 +543,7 @@ table td img.product-img {
 
 
 
-.more-btn:hover {
-    background-color: #0056b3;
-}
+
 
 .icon-box {
     display: flex;
@@ -534,11 +558,11 @@ table td img.product-img {
 }
 
 .sales-icon {
-    background-color: #4caf50; /* Green for Sales */
+    background-color: var(--total-orders-color); /* Green for Sales */
 }
 
 .visits-icon {
-    background-color: #ff9800; /* Orange for Site Visits */
+    background-color: #ffffff; /* Orange for Site Visits */
 }
 
 .searches-icon {
@@ -629,12 +653,6 @@ table td img.product-img {
     border-radius: 5px; /* Rounded corners for images */
 }
 
-.status {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: 500;
-}
 
 .status.pending {
     background-color: #FFC107; /* Yellow for Pending */
@@ -674,10 +692,41 @@ table td img.product-img {
 /* Card Layout */
 .analyse .card {
   background: var(--light);
-  padding: 20px;
+  padding: 10px;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Make the card take full width of its container */
+  max-width: 280px; /* Maximum width */
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space between elements */
+  align-items: center; /* Center items vertically */
+}
+
+/* Adjust the icon box size */
+.icon-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px; /* Increased size */
+  height: 60px; /* Increased size */
+  border-radius: 50%;
+  color: #fff;
+  font-size: 32px; /* Adjusted icon size */
+}
+
+/* Card Hover Effect */
+.analyse .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Slightly darker shadow on hover */
+}
+
+/* Wrapper Card Style */
+.wrapper-card {
+  margin-top: 30px;
+  display: flex; /* Changed to flex for layout */
+  justify-content: space-between; /* Space between cards */
+  gap: 20px; /* Space between cards */
 }
 
 .analyse .card:hover {
@@ -685,19 +734,11 @@ table td img.product-img {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Card Content Layout */
-.card .status {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* memisahkan info dan icon */
-  gap: 20px;
-  flex-direction: row; /* urutan: info kiri, icon kanan */
-}
 
 /* Icon Styling */
 .icon-box {
   background-color: var(--light-blue);
-  padding: 14px;
+  padding: 20px;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -736,7 +777,7 @@ table td img.product-img {
   display: flex;
   align-items: center;
   justify-content: space-between; /* memisahkan info dan icon */
-  gap: 20px;
+  gap: 2px;
   flex-direction: row; /* urutan: info kiri, icon kanan */
 }
 
@@ -746,8 +787,8 @@ table td img.product-img {
 }
 
 /* Icon box di kanan */
-.status .icon-box {
-  background-color: var(--light-blue);
+/* .status .icon-box {
+  background-color: var(--box-icon);
   padding: 14px;
   border-radius: 12px;
   display: flex;
@@ -755,13 +796,7 @@ table td img.product-img {
   justify-content: center;
   min-width: 50px;
   min-height: 50px;
-}
-
-/* Icon Style */
-.icon-box span {
-  font-size: 32px;
-  color: var(--blue);
-}
+} */
 
 
 /* Wrapper Card Style */
@@ -781,19 +816,12 @@ table td img.product-img {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Slightly darker shadow on hover */
 }
 
-/* Card Content Layout */
-.card .status {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Keep info and icon separated */
-  gap: 15px; /* Reduced gap */
-}
 
 /* Info Text Styling */
 .info h3 {
   font-size: 0.8rem; /* Adjusted font size */
   color: var(--dark-grey);
-  margin-bottom: 4px;
+  margin-bottom: 0px;
 }
 .info h1 {
   font-size: 1.5rem; /* Adjusted font size */
@@ -810,7 +838,7 @@ table td img.product-img {
 /* Icon Box Styling */
 .icon-box span {
   font-size: 22px; /* Adjusted icon size */
-  color: var(--blue);
+  color: var(--dark-primary);
 }
 
 /* Card Layout */
@@ -823,7 +851,7 @@ table td img.product-img {
 /* Button Styling */
 .more-btn {
     padding: 8px 18px; /* Increased padding for a larger button */
-    background-color: var(--button-primary); /* Button background color */
+    background-color: var(--dark-primary); /* Button background color */
     color: var(--dark); /* Text color */
     border: none; /* No border */
     border-radius: 5px; /* Rounded corners */
@@ -836,7 +864,7 @@ table td img.product-img {
 
 /* Button Hover Effect */
 .more-btn:hover {
-    background-color: var(--light-blue); /* Darker background on hover */
+    background-color: var(--box-icon); /* Darker background on hover */
     transform: translateY(-2px); /* Slight lift effect */
 }
 
@@ -845,4 +873,64 @@ table td img.product-img {
 .card:hover {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
 }
+
+.card {
+    position: relative; /* Set position relative for absolute positioning of button */
+}
+
+.more-btn {
+    padding: 8px 16px; /* Padding for the button */
+    background-color: var(--dark-primary); /* Button background color */
+    color: var(--dark); /* Text color */
+    border: none; /* No border */
+    border-radius: 10px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 12px; /* Font size */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+    position: absolute; /* Position the button absolutely */
+    bottom: 30px; /* Distance from the bottom */
+    right: 18px; /* Distance from the right */
+}
+
+/* Button Hover Effect */
+.more-btn:hover {
+    background-color: var(--box-icon); /* Darker background on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Specific Icon Colors */
+/* Icon Box Style */
+.icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* Increased size for icons */
+    height: 50px; /* Increased size for icons */
+    border-radius: 20%; /* Circular shape */
+    background-color: transparent; /* Ensure background is transparent */
+    color: #fff; /* Set icon color to white */
+    font-size: 32px; /* Icon size */
+    margin-right: 15px; /* Space between icon and text */
+}
+
+/* Specific Icon Colors */
+.total-orders-icon {
+    background-color: #2196F3; /* Blue for Total Orders */
+}
+
+.omzet-icon {
+    background-color: #4CAF50; /* Green for Omzet */
+}
+
+.transaction-count-icon {
+    background-color: #FFC107; /* Yellow for Transaction Count */
+}
+
+/* Ensure the icon color is white */
+.total-orders-icon span,
+.omzet-icon span,
+.transaction-count-icon span {
+    color: #fff; /* Set icon color to white */
+}
+
 

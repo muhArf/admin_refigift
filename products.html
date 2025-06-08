@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         body {
-            background-color: #f0f4ff; /* Light blue background */
+            background-color: #F1F0F6;
             font-family: 'Open Sans', sans-serif;
         }
 
@@ -27,11 +27,11 @@
             border-collapse: collapse;
             margin: 20px 0;
             font-size: 0.8rem;
-            box-shadow: none; /* Remove shadow */
+            box-shadow: none;
         }
 
         .styled-table thead tr {
-            background-color: #6c7ae0; /* Header background color */
+            background-color: #6c7ae0;
             color: #ffffff;
             text-align: left;
         }
@@ -39,21 +39,20 @@
         .styled-table th,
         .styled-table td {
             padding: 12px 15px;
-            border: none; /* Remove borders */
-            text-align: center; /* Align text to the left */
-            border-radius: 0; /* Remove border radius */
+            border: none;
+            text-align: center;
         }
 
         .styled-table tbody tr {
-            background-color: #ffffff; /* Row background color */
+            background-color: #ffffff;
         }
 
         .styled-table tbody tr:nth-of-type(even) {
-            background-color: #f2f2f2; /* Alternate row color */
+            background-color: #f2f2f2;
         }
 
         .styled-table tbody tr:hover {
-            background-color: #e0e7ff; /* Light blue on hover */
+            background-color: #e0e7ff;
         }
 
         .actions {
@@ -71,25 +70,25 @@
         }
 
         .edit-btn {
-            background-color: #4E71FF; /* Edit button color */
+            background-color: #4E71FF;
         }
 
         .edit-btn:hover {
-            background-color: #5a6dbd; /* Darker shade on hover */
-            transform: translateY(-2px); /* Lift effect */
+            background-color: #5a6dbd;
+            transform: translateY(-2px);
         }
 
         .delete-btn {
-            background-color: #e74c3c; /* Delete button color */
+            background-color: #e74c3c;
         }
 
         .delete-btn:hover {
-            background-color: #c0392b; /* Darker shade on hover */
-            transform: translateY(-2px); /* Lift effect */
+            background-color: #c0392b;
+            transform: translateY(-2px);
         }
 
         .search-box {
-            margin: 5px 0; /* Reduced margin */
+            margin: 5px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -111,7 +110,6 @@
             width: 250px;
         }
 
-        /* Custom styles for SweetAlert input fields */
         .swal2-input {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -123,8 +121,8 @@
         }
 
         .swal2-input:focus {
-            border-color: #6c7ae0; /* Highlight border color on focus */
-            outline: none; /* Remove default outline */
+            border-color: #6c7ae0;
+            outline: none;
         }
 
         .swal2-title {
@@ -138,7 +136,7 @@
     </style>
 </head>
 <body>
-    
+
     <!-- SIDEBAR -->
     <section id="sidebar">
         <a href="index.html" class="brand">
@@ -150,17 +148,15 @@
             <li>
                 <a href="orders.html"><i class='bx bxs-inbox icon'></i> Pesanan <i></i></a>
             </li>
-            <li><a href="products.html" class="active"><i class='bx bxs-chart icon'></i> Produk  </a></li>
+            <li><a href="products.html" class="active"><i class='bx bxs-chart icon'></i> Produk</a></li>
             <li class="divider"></li>
             <li class="profile">
                 <div class="profile-details">
-                    <img src="images/profile-1.jpeg" alt="profileImg" />
                     <div class="name_job">
-                        <div class="name">RefiGift</div>
-                        <div class="job">Admin</div>
+                        <div class="name">Logout</div> <!-- Changed to "Logout" -->
                     </div>
                     <a href="#" class="logout-btn">
-                        <i class='bx bx-log-out' id="log_out"></i>
+                       <i class='bx bx-log-out' style="font-size: 24px; color: #ffffff; margin-left: 90px;" id="log_out"></i>
                     </a>
                 </div>
             </li>
@@ -188,7 +184,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Rows will be populated dynamically -->
+                        <!-- Rows populated via JS -->
                     </tbody>
                 </table>
             </div>
@@ -197,23 +193,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Function to fetch products
         function fetchProducts() {
-            fetch('products_backend.php', {
-                method: 'GET'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            fetch('products_backend.php')
+            .then(res => res.json())
             .then(data => {
-                const productsTable = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
-                productsTable.innerHTML = ''; // Clear existing rows
+                const tbody = document.getElementById("productsTable").querySelector("tbody");
+                tbody.innerHTML = '';
                 data.forEach(product => {
-                    const newRow = productsTable.insertRow();
-                    newRow.innerHTML = `
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
                         <td>${product.name}</td>
                         <td><img src="${product.image}" alt="${product.name}" style="width: 100px;"></td>
                         <td>${product.category}</td>
@@ -224,16 +212,15 @@
                             <a href="#" class="delete-btn" data-id="${product.id}">Delete</a>
                         </td>
                     `;
+                    tbody.appendChild(row);
                 });
             })
-            .catch(error => console.error('Error fetching products:', error));
+            .catch(err => console.error('Error fetching:', err));
         }
 
-        // Call fetchProducts on page load
         document.addEventListener('DOMContentLoaded', fetchProducts);
 
-        // Add event listener for adding products
-        document.getElementById('addProductBtn').addEventListener('click', function() {
+        document.getElementById("addProductBtn").addEventListener("click", () => {
             Swal.fire({
                 title: 'Tambah Produk',
                 html: `
@@ -241,198 +228,79 @@
                     <input type="text" id="category" class="swal2-input" placeholder="Kategori">
                     <input type="number" id="stock" class="swal2-input" placeholder="Stocks">
                     <input type="number" id="price" class="swal2-input" placeholder="Harga">
-                    <input type="file" id="image" class="swal2-input" accept="image/jpeg">
+                    <input type="file" id="image" class="swal2-input" accept="image/*">
                 `,
                 focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: 'Submit',
-                cancelButtonText: 'Exit',
+                cancelButtonText: 'Cancel',
                 preConfirm: () => {
-                    const productName = document.getElementById('productName').value;
-                    const category = document.getElementById('category').value;
+                    const name = document.getElementById('productName').value;
+                    const cat = document.getElementById('category').value;
                     const stock = document.getElementById('stock').value;
                     const price = document.getElementById('price').value;
-                    const imageFile = document.getElementById('image').files[0];
-
-                    if (!productName || !category || !stock || !price || !imageFile) {
-                        Swal.showValidationMessage('Please fill in all fields');
+                    const image = document.getElementById('image').files[0];
+                    if (!name || !cat || !stock || !price || !image) {
+                        Swal.showValidationMessage("Semua field harus diisi!");
                     }
-
-                    return { productName, category, stock, price, imageFile };
+                    return { name, cat, stock, price, image };
                 }
-            }).then((result) => {
+            }).then(result => {
                 if (result.isConfirmed) {
-                    const { productName, category, stock, price, imageFile } = result.value;
-
-                    const formData = new FormData();
-                    formData.append('name', productName);
-                    formData.append('category', category);
-                    formData.append('stock', stock);
-                    formData.append('price', price);
-                    formData.append('image', imageFile);
-
+                    const { name, cat, stock, price, image } = result.value;
+                    const fd = new FormData();
+                    fd.append('name', name);
+                    fd.append('category', cat);
+                    fd.append('stock', stock);
+                    fd.append('price', price);
+                    fd.append('image', image);
                     fetch('products_backend.php', {
                         method: 'POST',
-                        body: formData
+                        body: fd
                     })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
+                    .then(res => res.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            Swal.fire('Product Added!', '', 'success');
-                            fetchProducts(); // Refresh the product list
+                            Swal.fire("Produk ditambahkan!", "", "success");
+                            fetchProducts();
                         } else {
-                            Swal.fire('Error!', data.message, 'error');
+                            Swal.fire("Gagal", data.message, "error");
                         }
-                    })
-                    .catch(error => console.error('Error adding product:', error));
+                    });
                 }
             });
         });
 
-        // Add event listener for edit buttons
-        document.getElementById('productsTable').addEventListener('click', function(event) {
-            if (event.target.classList.contains('edit-btn')) {
-                event.preventDefault();
-                const id = event.target.dataset.id;
-
-                fetch(`products_backend.php?id=${id}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(product => {
-                        Swal.fire({
-                            title: 'Edit Produk',
-                            html: `
-                                <input type="text" id="editProductName" class="swal2-input" placeholder="Nama Produk" value="${product.name || ''}">
-                                <input type="text" id="editCategory" class="swal2-input" placeholder="Kategori" value="${product.category || ''}">
-                                <input type="number" id="editStock" class="swal2-input" placeholder="Stocks" value="${product.stock || ''}">
-                                <input type="number" id="editPrice" class="swal2-input" placeholder="Harga" value="${product.price || ''}">
-                                <input type="file" id="editImage" class="swal2-input" accept="image/jpeg">
-                                ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100px; margin-top: 10px;">` : ''}
-                            `,
-                            focusConfirm: false,
-                            showCancelButton: true,
-                            confirmButtonText: 'Update Data',
-                            cancelButtonText: 'Cancel',
-                            preConfirm: () => {
-                                const updatedProductName = document.getElementById('editProductName').value;
-                                const updatedCategory = document.getElementById('editCategory').value;
-                                const updatedStock = document.getElementById('editStock').value;
-                                const updatedPrice = document.getElementById('editPrice').value;
-                                const updatedImage = document.getElementById('editImage').files[0];
-
-                                if (!updatedProductName || !updatedCategory || !updatedStock || !updatedPrice) {
-                                    Swal.showValidationMessage('Please fill in all fields');
-                                }
-
-                                return { id, updatedProductName, updatedCategory, updatedStock, updatedPrice, updatedImage };
-                            }
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                const { id, updatedProductName, updatedCategory, updatedStock, updatedPrice, updatedImage } = result.value;
-
-                                const formData = new FormData();
-                                formData.append('id', id);
-                                formData.append('name', updatedProductName);
-                                formData.append('category', updatedCategory);
-                                formData.append('stock', updatedStock);
-                                formData.append('price', updatedPrice);
-                                if (updatedImage) {
-                                    formData.append('image', updatedImage); // Include new image if provided
-                                }
-
-                                fetch('products_backend.php', {
-                                    method: 'POST', // Use POST to send form data
-                                    body: formData
-                                })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error('Network response was not ok');
-                                    }
-                                    return response.json();
-                                })
-                                .then(data => {
-                                    if (data.status === 'success') {
-                                        Swal.fire('Product Updated!', '', 'success');
-                                        fetchProducts(); // Refresh the product list
-                                    } else {
-                                        Swal.fire('Error!', data.message, 'error');
-                                    }
-                                })
-                                .catch(error => console.error('Error updating product:', error));
-                            }
-                        });
-                    })
-                    .catch(error => console.error('Error fetching product:', error));
-            }
-        });
-
-        // Add event listener for delete buttons
-        document.getElementById('productsTable').addEventListener('click', function(event) {
-            if (event.target.classList.contains('delete-btn')) {
-                event.preventDefault();
-                const id = event.target.dataset.id;
-
+        document.getElementById("productsTable").addEventListener("click", (e) => {
+            if (e.target.classList.contains("delete-btn")) {
+                e.preventDefault();
+                const id = e.target.dataset.id;
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    title: 'Hapus Produk?',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
+                    confirmButtonText: 'Ya, hapus!'
+                }).then(result => {
                     if (result.isConfirmed) {
                         fetch('products_backend.php', {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ id })
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: `delete_id=${id}`
                         })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
+                        .then(res => res.json())
                         .then(data => {
                             if (data.status === 'success') {
-                                Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
-                                fetchProducts(); // Refresh the product list
+                                Swal.fire("Berhasil dihapus!", "", "success");
+                                fetchProducts();
+                            } else {
+                                Swal.fire("Gagal", data.message, "error");
                             }
-                        })
-                        .catch(error => console.error('Error deleting product:', error));
+                        });
                     }
                 });
             }
         });
-
-        // Add event listener for search input
-        document.getElementById('searchInput').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const productsTable = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
-            const rows = productsTable.getElementsByTagName('tr');
-
-            for (let i = 0; i < rows.length; i++) {
-                const productName = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
-                const productCategory = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
-
-                if (productName.includes(searchTerm) || productCategory.includes(searchTerm)) {
-                    rows[i].style.display = ""; // Show the row
-                } else {
-                    rows[i].style.display = "none"; // Hide the row
-                }
-            }
-        });
     </script>
+
 </body>
 </html>

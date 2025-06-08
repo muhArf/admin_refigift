@@ -9,16 +9,26 @@
     <link rel="icon" href="ADMIN_REFIGIFT/logo.jpg" type="image/png">
     <title>Refi Gift | Admin</title>
     <style>
-        /* Add this style to align the logout icon */
+        #sidebar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            padding-bottom: 1rem;
+        }
+
+        .side-menu li a,
         .logout-btn {
             display: flex;
-            justify-content: flex-end; /* Aligns the icon to the right */
-            padding: 10px; /* Add some padding */
+            align-items: center;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: inherit;
         }
-        .logout-btn i {
-            font-size: 24px; /* Adjust icon size */
-            color: #ff4d4d; /* Change icon color (optional) */
-            margin-left: 50px; /* Move the icon further to the right */
+
+        .side-menu li a .icon,
+        .logout-btn .icon {
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -26,27 +36,27 @@
     
     <!-- SIDEBAR -->
     <section id="sidebar">
-        <a href="index.html" class="brand">
-            <img src="images/logo.svg" alt="Logo" style="height: 30px; margin-right: 10px;">
-            E-Admin
-        </a>
+        <div>
+            <a href="index.html" class="brand">
+                <img src="images/logo.svg" alt="Logo" style="height: 30px; margin-right: 10px;">
+                E-Admin
+            </a>
+            <ul class="side-menu">
+                <li><a href="index.html" class="active"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
+                <li>
+                    <a href="orders.html"><i class='bx bxs-inbox icon'></i> Pesanan</a>
+                </li>
+                <li><a href="products.html"><i class='bx bxs-chart icon'></i> Produk</a></li>
+                <li class="divider"></li>
+            </ul>
+        </div>
+        <!-- Logout Button -->
         <ul class="side-menu">
-            <li><a href="index.html" class="active"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
             <li>
-                <a href="orders.html"><i class='bx bxs-inbox icon'></i> Pesanan</a>
-            </li>
-            <li><a href="products.html"><i class='bx bxs-chart icon'></i> Produk</a></li>
-            <li class="divider"></li>
-            <li class="profile">
-                <div class="profile-details">
-                    <div class="name_job">
-                        <div class="name">Admin</div>
-                        <div class="job">Administrator</div> <!-- Keterangan Administrator ditambahkan di sini -->
-                    </div>
-                    <a href="#" class="logout-btn">
-                        <i class='bx bx-log-out' id="log_out"></i> <!-- Removed "Logout" text -->
-                    </a>
-                </div>
+                <a href="logout.php" class="logout-btn">
+                    <i class='bx bx-log-out icon'></i>
+                    <span>Logout</span>
+                </a>
             </li>
         </ul>
     </section>
@@ -59,43 +69,43 @@
             <!-- Analyses Section -->
             <div class="wrapper-card">
                 <div class="analyse">
-                    <div class="card sales">
+                    <div class="card total-orders">
                         <div class="status">
-                            <div class="info">
-                                <h3>Pemesanan Selesai</h3>
-                                <h1 id="totalOrder">0</h1>
-                                <button onclick="downloadReport()" class="more-btn">Unduh Laporan</button>
-                            </div>
-                            <div class="icon-box sales-icon">
-                                <span class="material-icons-sharp">check_circle</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card visits">
-                        <div class="status">
-                            <div class="info">
-                                <h3>Pemesanan Tervalidasi</h3>
-                                <h1 id="validatedOrderCount">0</h1>
-                                <button onclick="downloadReport()" class="more-btn">More</button>
-                            </div>
-                            <div class="icon-box visits-icon">
-                                <span class="material-icons-sharp">verified</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card searches">
-                        <div class="status">
-                            <div class="info">
-                                <h3>Produk Terjual</h3>         
-                                <h1>14,147</h1>
-                                <button onclick="downloadReport()" class="more-btn">More</button>
-                            </div>
-                            <div class="icon-box searches-icon">
+                            <div class="icon-box total-orders-icon">
                                 <span class="material-icons-sharp">shopping_cart</span>
                             </div>
+                            <div class="info">
+                                <h3>Total Pesanan</h3>
+                                <h1 id="totalOrder">0</h1>
+                            </div>
                         </div>
+                        <button onclick="downloadReport('totalOrders')" class="more-btn">More</button>
+                    </div>
+
+                    <div class="card omzet">
+                        <div class="status">
+                            <div class="icon-box omzet-icon">
+                                <span class="material-icons-sharp">attach_money</span>
+                            </div>
+                            <div class="info">
+                                <h3>Omzet</h3>
+                                <h1>Rp 0</h1>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('omzet')" class="more-btn">More</button>
+                    </div>
+
+                    <div class="card transaction-count">
+                        <div class="status">
+                            <div class="icon-box transaction-count-icon">
+                                <span class="material-icons-sharp">receipt_long</span>
+                            </div>
+                            <div class="info">
+                                <h3>Jumlah Transaksi</h3>
+                                <h1>0</h1>
+                            </div>
+                        </div>
+                        <button onclick="downloadReport('transactionCount')" class="more-btn">More</button>
                     </div>
                 </div>
             </div>
@@ -105,12 +115,11 @@
             <div class="orders recent-orders">
                 <div class="header">
                     <h3>Recent Order</h3>
-                    <!-- Removed filter section -->
                 </div>
                 <table class="styled-table">
                     <thead>
                         <tr>
-                            <th>No</th> <!-- Kolom nomor -->
+                            <th>No</th>
                             <th>Nama Customer</th>
                             <th>Nama Produk</th>
                             <th>Jumlah</th>
@@ -147,7 +156,7 @@
             })
             .then(data => {
                 const ordersTableBody = document.getElementById('ordersTableBody');
-                ordersTableBody.innerHTML = ''; // Clear existing rows
+                ordersTableBody.innerHTML = '';
                 data.forEach((order, index) => {
                     const newRow = ordersTableBody.insertRow();
                     newRow.innerHTML = `
@@ -188,16 +197,15 @@
             let validatedOrders = 0;
 
             rows.forEach(row => {
-                const validationStatus = row.querySelector('td:nth-child(7) span').innerText; // Get the status from the 7th column
+                const validationStatus = row.querySelector('td:nth-child(7) span').innerText;
                 if (validationStatus === 'Valid') {
                     validatedOrders++;
                 }
             });
 
-            document.getElementById('validatedOrderCount').innerText = validatedOrders; // Update the count
+            document.getElementById('validatedOrderCount').innerText = validatedOrders;
         }
 
-        // Call the functions to update counts on page load
         updateTotalOrders();
         updateValidatedOrders();
     </script>
