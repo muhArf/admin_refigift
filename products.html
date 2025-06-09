@@ -153,7 +153,7 @@
             <li class="profile">
                 <div class="profile-details">
                     <div class="name_job">
-                        <div class="name">Logout</div> <!-- Changed to "Logout" -->
+                        <div class="name">Logout</div>
                     </div>
                     <a href="#" class="logout-btn">
                        <i class='bx bx-log-out' style="font-size: 24px; color: #ffffff; margin-left: 90px;" id="log_out"></i>
@@ -220,6 +220,7 @@
 
         document.addEventListener('DOMContentLoaded', fetchProducts);
 
+        // Add Product
         document.getElementById("addProductBtn").addEventListener("click", () => {
             Swal.fire({
                 title: 'Tambah Produk',
@@ -271,7 +272,71 @@
             });
         });
 
+        // Edit Product
         document.getElementById("productsTable").addEventListener("click", (e) => {
+            if (e.target.classList.contains("edit-btn")) {
+                e.preventDefault();
+                const id = e.target.dataset.id;
+
+                // Fetch the current product details for editing
+                fetch(`products_backend.php?id=${id}`)
+                .then(res => res.json())
+                .then(product => {
+                    Swal.fire({
+                        title: 'Edit Produk',
+                        html: `
+                            <input type="text" id="editProductName" class="swal2-input" value="${product.name}" placeholder="Nama Produk">
+                            <input type="text" id="editCategory" class="swal2-input" value="${product.category}" placeholder="Kategori">
+                            <input type="number" id="editStock" class="swal2-input" value="${product.stock}" placeholder="Stocks">
+                            <input type="number" id="editPrice" class="swal2-input" value="${product.price}" placeholder="Harga">
+                            <input type="file" id="editImage" class="swal2-input" accept="image/*">
+                        `,
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: 'Update',
+                        cancelButtonText: 'Cancel',
+                        preConfirm: () => {
+                            const name = document.getElementById('editProductName').value;
+                            const cat = document.getElementById('editCategory').value;
+                            const stock = document.getElementById('editStock').value;
+                            const price = document.getElementById('editPrice').value;
+                            const image = document.getElementById('editImage').files[0];
+                            if (!name || !cat || !stock || !price) {
+                                Swal.showValidationMessage("Semua field harus diisi!");
+                            }
+                            return { id, name, cat, stock, price, image };
+                        }
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            const { id, name, cat, stock, price, image } = result.value;
+                            const fd = new FormData();
+                            fd.append('edit_id', id);
+                            fd.append('name', name);
+                            fd.append('category', cat);
+                            fd.append('stock', stock);
+                            fd.append('price', price);
+                            if (image) {
+                                fd.append('image', image);
+                            }
+                            fetch('products_backend.php', {
+                                method: 'POST',
+                                body: fd
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    Swal.fire("Produk diperbarui!", "", "success");
+                                    fetchProducts();
+                                } else {
+                                    Swal.fire("Gagal", data.message, "error");
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            // Delete Product
             if (e.target.classList.contains("delete-btn")) {
                 e.preventDefault();
                 const id = e.target.dataset.id;
@@ -283,22 +348,40 @@
                 }).then(result => {
                     if (result.isConfirmed) {
                         fetch('products_backend.php', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                            body: `delete_id=${id}`
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: id }) // Send the ID as JSON
                         })
                         .then(res => res.json())
                         .then(data => {
                             if (data.status === 'success') {
                                 Swal.fire("Berhasil dihapus!", "", "success");
-                                fetchProducts();
+                                fetchProducts(); // Refresh the product list
                             } else {
                                 Swal.fire("Gagal", data.message, "error");
                             }
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            Swal.fire("Gagal", "Terjadi kesalahan saat menghapus produk.", "error");
                         });
                     }
                 });
             }
+        });
+
+        // Search functionality
+        document.getElementById("searchInput").addEventListener("input", function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll("#productsTable tbody tr");
+            rows.forEach(row => {
+                const productName = row.cells[0].textContent.toLowerCase();
+                if (productName.includes(searchTerm)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
         });
     </script>
 

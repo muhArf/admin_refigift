@@ -21,13 +21,17 @@ $request_method = $_SERVER["REQUEST_METHOD"];
 
 switch ($request_method) {
     case 'GET':
-        fetch_products($conn);
+        if (isset($_GET['id'])) {
+            fetch_product($conn); // Fetch a single product if ID is provided
+        } else {
+            fetch_products($conn); // Fetch all products
+        }
         break;
     case 'POST':
-        if (isset($_POST['id'])) {
-            update_product($conn); // Call update function for POST with ID
+        if (isset($_POST['edit_id'])) {
+            update_product($conn); // Call update function for POST with edit_id
         } else {
-            add_product($conn); // Call add function for POST without ID
+            add_product($conn); // Call add function for POST without edit_id
         }
         break;
     case 'DELETE':
@@ -49,6 +53,22 @@ function fetch_products($conn) {
     }
 
     echo json_encode($products);
+    exit(); // Stop further execution
+}
+
+function fetch_product($conn) {
+    $id = $_GET['id'];
+    $stmt = $conn->prepare("SELECT * FROM products WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $product = $result->fetch_assoc();
+        echo json_encode($product);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Product not found']);
+    }
     exit(); // Stop further execution
 }
 
@@ -82,7 +102,7 @@ function add_product($conn) {
 }
 
 function update_product($conn) {
-    $id = $_POST['id'];
+    $id = $_POST['edit_id']; // Use edit_id for updating
     $name = $_POST['name'];
     $category = $_POST['category'];
     $stock = $_POST['stock'];
@@ -124,14 +144,23 @@ function update_product($conn) {
 }
 
 function delete_product($conn) {
+    // Decode the raw POST data
     $data = json_decode(file_get_contents("php://input"), true);
-    $id = $data['id'];
+    if (isset($data['id'])) {
+        $id = $data['id'];
 
-    $stmt = $conn->prepare("DELETE FROM products WHERE id=?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+        $stmt = $conn->prepare("DELETE FROM products WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
 
-    echo json_encode(['status' => 'success']);
+        if ($stmt->affected_rows > 0) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid ID or no rows affected']);
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'ID not provided']);
+    }
     exit(); // Stop further execution
 }
 
