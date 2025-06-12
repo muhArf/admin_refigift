@@ -933,3 +933,14 @@ table td img.product-img {
 }
 
 
+.radio-container {
+    margin-bottom: 10px;
+    text-align: left; /* Align text to the left */
+}
+
+.total-price {
+    font-size: 1.2em;
+    color: red; /* Highlight total price */
+    margin: 10px 0;
+    text-align: left; /* Align text to the left */
+}

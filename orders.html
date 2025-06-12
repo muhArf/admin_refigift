@@ -37,7 +37,7 @@
         .styled-table td {
             padding: 12px 15px;
             border: none; /* Remove borders */
-            text-align: left; /* Align text to the left */
+            text-align: center; /* Center text in table */
             border-radius: 0; /* Remove border radius */
         }
         .styled-table tbody tr {
@@ -69,15 +69,19 @@
             color: #6c7ae0;
             text-decoration: none;
             font-weight: bold;
+            margin-right: 10px;
         }
-        /* Custom styles for SweetAlert input fields */
+        .view-more {
+            cursor: pointer;
+            color: #6c7ae0;
+        }
         .swal2-input {
-            border: 1px solid #ccc;
+            border: 1px solid #ccc; /* Keep border */
             border-radius: 5px;
             padding: 10px;
             margin: 5px 0;
             width: calc(100% - 20px); /* Full width minus padding */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: none; /* Remove shadow */
             transition: border-color 0.3s;
         }
         .swal2-input:focus {
@@ -92,20 +96,78 @@
             color: #555;
             margin-bottom: 10px; /* Add margin below content */
         }
-        /* Styles for radio buttons */
-        .radio-container {
+        .swal2-html-container {
             display: flex;
             flex-direction: column;
-            margin: 10px 0;
+            gap: 10px; /* Space between elements */
         }
-        .radio-container label {
+        .input-group {
             display: flex;
-            align-items: center;
-            margin: 5px 0;
+            align-items: center; /* Align items vertically centered */
+            gap: 10px; /* Space between input fields */
+        }
+        .input-group input,
+        .input-group select {
+            flex: 1; /* Allow inputs to grow */
+            padding: 10px;
+            border: 1px solid #ccc; /* Keep border */
+            border-radius: 5px;
+        }
+        .input-group button {
+            padding: 10px;
+            background-color: #4CAF50; /* Green for "Tambah Pesanan" */
+            color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
-        .radio-container input[type="radio"] {
-            margin-right: 10px;
+        .total-price {
+            font-size: 1.2em;
+            color: red; /* Highlight total price */
+            margin: 10px 0;
+            text-align: left; /* Align text to the left */
+        }
+        .radio-container {
+            margin-bottom: 10px;
+            text-align: left; /* Align text to the left */
+        }
+        .form-box {
+            border: none; /* Remove border */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .trash-icon {
+            cursor: pointer;
+            color: #FF0000; /* Red for trash icon */
+            font-size: 20px; /* Adjust size */
+        }
+        /* Additional styles for popup form */
+        .swal2-html-container {
+            padding: 10px;
+        }
+        .swal2-input {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            width: calc(100% - 20px);
+        }
+        .swal2-confirm {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .swal2-cancel {
+            background-color: #ccc;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
             cursor: pointer;
         }
     </style>
@@ -146,7 +208,7 @@
             <!-- Order Table -->
             <div class="orders">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <button id="addOrderBtn" style="padding: 10px 20px; background-color: #D5C7A3; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    <button id="addOrderBtn" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Tambah Pesanan
                     </button>
                     <input type="text" id="searchInput" placeholder="Search..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 200px;">
@@ -156,8 +218,6 @@
                         <tr>
                             <th>No</th>
                             <th>Nama Customer</th>
-                            <th>Nama Produk</th>
-                            <th>Jumlah</th>
                             <th>Total Harga</th>
                             <th>Tanggal Pesan</th>
                             <th>Status Pembayaran</th>
@@ -182,17 +242,16 @@
         const searchInput = document.getElementById('searchInput');
         const ordersTable = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
         let products = [];
+        let orderItems = []; // Array to hold the order items
 
         // Function to fetch products from backend
         function fetchProducts() {
-            fetch('products_backend.php', {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                products = data; // Store products in a global variable
-            })
-            .catch(error => console.error('Error fetching products:', error));
+            fetch('products_backend.php')
+                .then(response => response.json())
+                .then(data => {
+                    products = data; // Store products in a global variable
+                })
+                .catch(error => console.error('Error fetching products:', error));
         }
 
         // Call fetchProducts on page load
@@ -203,82 +262,220 @@
 
         // Function to fetch orders from backend
         function fetchOrders() {
-            fetch('orders_backend.php', {
-                method: 'GET'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+            fetch('orders_backend.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    ordersTable.innerHTML = ''; // Clear existing rows
+                    const orderMap = {}; // To aggregate orders by customer
+
+                    // Aggregate products for each order
+                    data.forEach(order => {
+                        const orderKey = `${order.customer_name}-${order.tanggal_order}`;
+                        if (!orderMap[orderKey]) {
+                            orderMap[orderKey] = {
+                                customer_name: order.customer_name,
+                                total_harga: 0,
+                                tanggal_order: order.tanggal_order,
+                                status_pembayaran: order.status_pembayaran,
+                                status_validasi: order.status_validasi,
+                                status_pemesanan: order.status_pemesanan,
+                                products: [] // Store product details for display
+                            };
+                        }
+                        orderMap[orderKey].total_harga += parseFloat(order.total_harga);
+                        orderMap[orderKey].products.push({
+                            name: order.product_name,
+                            jumlah: order.jumlah
+                        });
+                    });
+
+                    // Populate the table with aggregated data
+                    Object.values(orderMap).forEach((order, index) => {
+                        const productDetails = order.products.map(p => `${p.name} (Qty: ${p.jumlah})`).join(', ');
+                        const newRow = ordersTable.insertRow();
+                        newRow.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${order.customer_name}</td>
+                            <td>Rp ${order.total_harga.toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</td>
+                            <td>${order.tanggal_order}</td>
+                            <td><span class="status ${order.status_pembayaran === 'completed' ? 'completed' : 'pending'}">${order.status_pembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
+                            <td><span class="status ${order.status_validasi === 'completed' ? 'completed' : 'pending'}">${order.status_validasi === 'completed' ? 'Valid' : 'Invalid'}</span></td>
+                            <td><span class="status ${order.status_pemesanan === 'completed' ? 'completed' : 'pending'}">${order.status_pemesanan === 'completed' ? 'Dikirim' : 'Belum Dikirim'}</span></td>
+                            <td class="actions">
+                                <span class="view-more" onclick="viewMore(${order.id})">👁️ View More</span>
+                                <a href="#" class="edit-btn">🖉 Edit</a>
+                            </td>
+                        `;
+                    });
+                })
+                .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        // Function to view more details
+        function viewMore(orderId) {
+            fetch(`order_details_backend.php?id=${orderId}`)
+                .then(response => response.json())
+                .then(order => {
+                    Swal.fire({
+                        title: 'Detail Pesanan',
+                        html: `
+                            <p><strong>Nama Customer:</strong> ${order.customer_name}</p>
+                            <p><strong>Nama Produk:</strong> ${order.product_name}</p>
+                            <p><strong>Jumlah:</strong> ${order.jumlah}</p>
+                            <p><strong>Total Harga:</strong> Rp ${parseFloat(order.total_harga).toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</p>
+                            <p><strong>Tanggal Pesan:</strong> ${order.tanggal_order}</p>
+                            <p><strong>Status Pembayaran:</strong> ${order.status_pembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</p>
+                            <p><strong>Status Validasi:</strong> ${order.status_validasi === 'completed' ? 'Valid' : 'Invalid'}</p>
+                            <p><strong>Status Pemesanan:</strong> ${order.status_pemesanan === 'completed' ? 'Dikirim' : 'Belum Dikirim'}</p>
+                        `,
+                        confirmButtonText: 'Tutup'
+                    });
+                })
+                .catch(error => console.error('Error fetching order details:', error));
+        }
+
+        // Function to add a new product input
+        function addProductInput() {
+            const productOptions = products.map(product => `<option value="${product.name}" data-price="${product.price}">${product.name} - Rp ${parseFloat(product.price).toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</option>`).join('');
+            
+            const productSelect = document.createElement('select');
+            productSelect.className = 'swal2-input';
+            productSelect.innerHTML = `<option value="" disabled selected>Pilih Produk</option>${productOptions}`;
+            
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.className = 'swal2-input';
+            quantityInput.placeholder = 'Qty';
+            quantityInput.min = 1;
+            quantityInput.value = 1;
+
+            const removeButton = document.createElement('span');
+            removeButton.className = 'trash-icon';
+            removeButton.innerHTML = '<i class="material-icons">delete</i>'; // Material icon for trash
+            removeButton.style.cursor = 'pointer';
+            removeButton.style.marginLeft = '10px';
+            removeButton.onclick = () => {
+                productContainer.remove(); // Remove product input
+                calculateTotal(); // Recalculate total
+            };
+
+            const productContainer = document.createElement('div');
+            productContainer.className = 'input-group';
+            productContainer.appendChild(productSelect);
+            productContainer.appendChild(quantityInput);
+            productContainer.appendChild(removeButton);
+            
+            document.getElementById('productInputs').appendChild(productContainer);
+
+            // Add event listener to the select to update available options
+            productSelect.addEventListener('change', function() {
+                const selectedProduct = this.value;
+                if (selectedProduct) {
+                    const quantity = quantityInput.value;
+                    // Add to orderItems
+                    orderItems.push({ product: selectedProduct, quantity: quantity });
+                    calculateTotal(); // Re-calculate total when a new product is added
+                    updateProductOptions();
                 }
-                return response.json();
-            })
-            .then(data => {
-                ordersTable.innerHTML = ''; // Clear existing rows
-                data.forEach((order, index) => {
-                    const newRow = ordersTable.insertRow();
-                    newRow.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${order.customer_name}</td>
-                        <td>${order.product_name}</td>
-                        <td>${order.jumlah}</td>
-                        <td>Rp ${parseFloat(order.total_harga).toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</td>
-                        <td>${order.tanggal_order}</td>
-                        <td><span class="status ${order.status_pembayaran === 'completed' ? 'completed' : 'pending'}">${order.status_pembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
-                        <td><span class="status ${order.status_validasi === 'completed' ? 'completed' : 'pending'}">${order.status_validasi === 'completed' ? 'Valid' : 'Invalid'}</span></td>
-                        <td><span class="status ${order.status_pemesanan === 'completed' ? 'completed' : 'pending'}">${order.status_pemesanan === 'completed' ? 'Dikirim' : 'Belum Dikirim'}</span></td>
-                        <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
-                    `;
+            });
+
+            // Update the orderItems when the quantity changes
+            quantityInput.addEventListener('input', () => {
+                const selectedProduct = productSelect.value;
+                if (selectedProduct) {
+                    const index = orderItems.findIndex(item => item.product === selectedProduct);
+                    if (index !== -1) {
+                        orderItems[index].quantity = quantityInput.value; // Update quantity in orderItems
+                    }
+                    calculateTotal(); // Recalculate total
+                }
+            });
+        }
+
+        // Function to update product options based on already selected items
+        function updateProductOptions() {
+            const productSelects = document.querySelectorAll('#productInputs select');
+            const selectedProducts = Array.from(productSelects).map(select => select.value);
+            
+            productSelects.forEach(select => {
+                const options = Array.from(select.options);
+                options.forEach(option => {
+                    // Disable options that are already selected
+                    if (selectedProducts.includes(option.value) && option.value !== select.value) {
+                        option.disabled = true; // Disable selected products
+                    } else {
+                        option.disabled = false; // Enable other options
+                    }
                 });
-            })
-            .catch(error => console.error('Error fetching orders:', error));
+            });
+        }
+
+        // Function to calculate total price
+        function calculateTotal() {
+            let total = 0;
+            orderItems.forEach(item => {
+                const product = products.find(p => p.name === item.product);
+                if (product) {
+                    total += product.price * item.quantity;
+                }
+            });
+            document.getElementById('totalHarga').textContent = `Total Pesanan: Rp ${total.toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}`;
         }
 
         // Add event listener for the "Tambah Order" button
         document.getElementById('addOrderBtn').addEventListener('click', function() {
-            const productOptions = products.map(product => `<option value="${product.name}" data-price="${product.price}">${product.name} - Rp ${parseFloat(product.price).toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}</option>`).join('');
+            orderItems = []; // Reset order items
+            const productInputsHtml = `
+                <div id="productInputs"></div>
+                <button onclick="addProductInput()" style="margin-top: 10px; background-color: #D5C7A3; color: white; border: none; border-radius: 5px; cursor: pointer;">Tambah Produk</button>
+            `;
 
             Swal.fire({
                 title: 'Tambah Pesanan',
                 html: `
-                    <input type="text" id="customerName" class="swal2-input" placeholder="Customer Name">
-                    <select id="productName" class="swal2-input">
-                        <option value="" disabled selected>Pilih Produk</option>
-                        ${productOptions}
-                    </select>
-                    <input type="number" id="jumlah" class="swal2-input" placeholder="Jumlah" min="1" value="1" oninput="calculateTotal()">
-                    <input type="text" id="totalHarga" class="swal2-input" placeholder="Total Harga" readonly>
-                    <div class="radio-container">
-                        <strong>Status Pembayaran:</strong>
-                        <label>
-                            <input type="radio" name="statusPembayaran" value="completed">
-                            Sudah Bayar
-                        </label>
-                        <label>
-                            <input type="radio" name="statusPembayaran" value="pending" checked>
-                            Belum Bayar
-                        </label>
-                    </div>
-                    <div class="radio-container">
-                        <strong>Status Validasi:</strong>
-                        <label>
-                            <input type="radio" name="statusValidasi" value="completed">
-                            Valid
-                        </label>
-                        <label>
-                            <input type="radio" name="statusValidasi" value="pending" checked>
-                            Invalid
-                        </label>
-                    </div>
-                    <div class="radio-container">
-                        <strong>Status Pemesanan:</strong>
-                        <label>
-                            <input type="radio" name="statusPemesanan" value="completed">
-                            Dikirim
-                        </label>
-                        <label>
-                            <input type="radio" name="statusPemesanan" value="pending" checked>
-                            Belum Dikirim
-                        </label>
+                    <div class="form-box">
+                        <input type="text" id="customerName" class="swal2-input" placeholder="Customer name">
+                        <input type="text" id="alamat" class="swal2-input" placeholder="Alamat">
+                        ${productInputsHtml}
+                        <div class="total-price" id="totalHarga" style="text-align: left;">Total Pesanan: Rp 0</div>
+                        <div class="radio-container" style="text-align: left;">
+                            <strong>Status Pembayaran:</strong>
+                            <label>
+                                <input type="radio" name="statusPembayaran" value="completed">
+                                Sudah Bayar
+                            </label>
+                            <label>
+                                <input type="radio" name="statusPembayaran" value="pending" checked>
+                                Belum Bayar
+                            </label>
+                        </div>
+                        <div class="radio-container" style="text-align: left;">
+                            <strong>Status Validasi:</strong>
+                            <label>
+                                <input type="radio" name="statusValidasi" value="completed">
+                                Valid
+                            </label>
+                            <label>
+                                <input type="radio" name="statusValidasi" value="pending" checked>
+                                Invalid
+                            </label>
+                        </div>
+                        <div class="radio-container" style="text-align: left;">
+                            <strong>Status Pemesanan:</strong>
+                            <label>
+                                <input type="radio" name="statusPemesanan" value="completed">
+                                Dikirim
+                            </label>
+                            <label>
+                                <input type="radio" name="statusPemesanan" value="pending" checked>
+                                Belum Dikirim
+                            </label>
+                        </div>
                     </div>
                 `,
                 focusConfirm: false,
@@ -287,38 +484,28 @@
                 cancelButtonText: 'Exit',
                 preConfirm: () => {
                     const customerName = document.getElementById('customerName').value;
-                    const productName = document.getElementById('productName').value;
-                    const jumlah = document.getElementById('jumlah').value;
-                    const totalHarga = document.getElementById('totalHarga').value.replace('Rp ', '').replace('.', '').replace(',', '.'); // Format totalHarga
+                    const alamat = document.getElementById('alamat').value;
                     const statusPembayaran = document.querySelector('input[name="statusPembayaran"]:checked') ? document.querySelector('input[name="statusPembayaran"]:checked').value : 'pending';
                     const statusValidasi = document.querySelector('input[name="statusValidasi"]:checked') ? document.querySelector('input[name="statusValidasi"]:checked').value : 'pending';
                     const statusPemesanan = document.querySelector('input[name="statusPemesanan"]:checked') ? document.querySelector('input[name="statusPemesanan"]:checked').value : 'pending';
 
-                    if (!customerName || !productName || !jumlah || !totalHarga) {
+                    if (!customerName || !alamat || orderItems.length === 0) {
                         Swal.showValidationMessage('Please fill in all fields');
                     }
 
-                    return { customerName, productName, jumlah, totalHarga, statusPembayaran, statusValidasi, statusPemesanan };
+                    return { customerName, alamat, orderItems, statusPembayaran, statusValidasi, statusPemesanan };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const { customerName, productName, jumlah, totalHarga, statusPembayaran, statusValidasi, statusPemesanan } = result.value;
+                    const { customerName, alamat, orderItems, statusPembayaran, statusValidasi, statusPemesanan } = result.value;
 
                     // Kirim data ke backend
                     fetch('orders_backend.php', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json',
                         },
-                        body: new URLSearchParams({
-                            customerName,
-                            productName,
-                            jumlah,
-                            totalHarga,
-                            statusPembayaran,
-                            statusValidasi,
-                            statusPemesanan,
-                        })
+                        body: JSON.stringify({ customerName, alamat, orderItems, statusPembayaran, statusValidasi, statusPemesanan })
                     })
                     .then(response => {
                         if (!response.ok) {
@@ -334,20 +521,13 @@
                             Swal.fire('Error!', data.message, 'error');
                         }
                     })
-                    .catch(error => console.error('Error adding order:', error));
+                    .catch(error => {
+                        console.error('Error adding order:', error);
+                        Swal.fire('Error!', 'Failed to add order. Please try again.', 'error');
+                    });
                 }
             });
         });
-
-        // Function to calculate total price
-        function calculateTotal() {
-            const productSelect = document.getElementById('productName');
-            const selectedOption = productSelect.options[productSelect.selectedIndex];
-            const price = selectedOption ? parseFloat(selectedOption.getAttribute('data-price')) : 0;
-            const quantity = document.getElementById('jumlah').value;
-            const total = price * quantity;
-            document.getElementById('totalHarga').value = `Rp ${total.toLocaleString('id-ID', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}`;
-        }
     </script>
 </body>
 </html>

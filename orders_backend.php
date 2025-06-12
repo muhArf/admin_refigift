@@ -52,28 +52,43 @@ function fetch_orders($conn) {
 }
 
 function add_order($conn) {
-    $customerName = $_POST['customerName'];
-    $productName = $_POST['productName'];
-    $jumlah = $_POST['jumlah'];
-    $totalHarga = $_POST['totalHarga'];
-    
-    // Hapus baris ini
-    // $tanggalOrder = date('Y-m-d'); // Tidak perlu lagi
+    // Read the JSON input
+    $input = json_decode(file_get_contents('php://input'), true);
 
-    $statusPembayaran = $_POST['statusPembayaran'];
-    $statusValidasi = $_POST['statusValidasi'];
-    $statusPemesanan = $_POST['statusPemesanan'];
+    $customerName = $input['customerName'];
+    $alamat = $input['alamat'];
+    $orderItems = $input['orderItems'];
 
-    $stmt = $conn->prepare("INSERT INTO orders (customer_name, product_name, jumlah, total_harga, tanggal_order, status_pembayaran, status_validasi, status_pemesanan) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)");
-    $stmt->bind_param("ssiisss", $customerName, $productName, $jumlah, $totalHarga, $statusPembayaran, $statusValidasi, $statusPemesanan);
-    $stmt->execute();
+    foreach ($orderItems as $item) {
+        $productName = $item['product'];
+        $jumlah = $item['quantity'];
+        $totalHarga = $item['quantity'] * getProductPrice($productName, $conn); // Calculate total price based on quantity
 
-    if ($stmt->affected_rows > 0) {
-        echo json_encode(['status' => 'success', 'id' => $stmt->insert_id]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to add order']);
+        $statusPembayaran = $input['statusPembayaran'];
+        $statusValidasi = $input['statusValidasi'];
+        $statusPemesanan = $input['statusPemesanan'];
+
+        // Prepare the SQL statement
+        $stmt = $conn->prepare("INSERT INTO orders (customer_name, alamat, product_name, jumlah, total_harga, tanggal_order, status_pembayaran, status_validasi, status_pemesanan) VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?)");
+        $stmt->bind_param("sssiisss", $customerName, $alamat, $productName, $jumlah, $totalHarga, $statusPembayaran, $statusValidasi, $statusPemesanan);
+        
+        if (!$stmt->execute()) {
+            echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $stmt->error]);
+            exit();
+        }
     }
+
+    echo json_encode(['status' => 'success']);
     exit(); // Hentikan eksekusi lebih lanjut
+}
+
+function getProductPrice($productName, $conn) {
+    $stmt = $conn->prepare("SELECT price FROM products WHERE name = ?");
+    $stmt->bind_param("s", $productName);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row['price'];
 }
 
 function delete_order($conn) {
