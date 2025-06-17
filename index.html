@@ -5,30 +5,392 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="ADMIN_REFIGIFT/logo.jpg" type="image/png">
     <title>Refi Gift | Admin</title>
     <style>
-        #sidebar {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100vh;
-            padding-bottom: 1rem;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .side-menu li a,
-        .logout-btn {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #64748b;
+            --secondary-light: #94a3b8;
+            --success: #10b981;
+            --success-light: #34d399;
+            --warning: #f59e0b;
+            --warning-light: #fbbf24;
+            --danger: #ef4444;
+            --danger-light: #f87171;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+        body {
+            background: var(--background);
+            overflow-x: hidden;
+            color: var(--text-primary);
+        }
+
+        a {
             text-decoration: none;
             color: inherit;
         }
 
-        .side-menu li a .icon,
+        li {
+            list-style: none;
+        }
+
+        /* SIDEBAR */
+        #sidebar {
+            position: fixed;
+            max-width: 260px;
+            width: 100%;
+            background: var(--surface);
+            top: 0;
+            left: 0;
+            height: 100%;
+            overflow-y: auto;
+            scrollbar-width: none;
+            transition: all 0.3s ease;
+            z-index: 200;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-bottom: 1rem;
+        }
+
+        #sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        #sidebar .brand {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 64px;
+            font-weight: 600;
+            color: var(--primary);
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            background: var(--surface);
+            transition: all 0.3s ease;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        #sidebar .side-menu {
+            margin: 20px 0;
+            padding: 0 16px;
+            transition: all 0.3s ease;
+        }
+
+        #sidebar .side-menu a {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 0;
+            white-space: nowrap;
+        }
+
+        #sidebar .side-menu a:hover {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+        }
+
+        #sidebar .side-menu a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        #sidebar .side-menu a .icon {
+            margin-right: 12px;
+            min-width: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            margin: 0 16px;
+            text-decoration: none;
+            color: white;
+            background-color: var(--danger);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background-color: var(--danger-light);
+            transform: translateY(-1px);
+        }
+
         .logout-btn .icon {
-            margin-right: 10px;
+            margin-right: 8px;
+        }
+
+        /* CONTENT */
+        #content {
+            position: relative;
+            width: calc(100% - 260px);
+            left: 260px;
+            transition: all 0.3s ease;
+        }
+
+        /* MAIN */
+        main {
+            width: 100%;
+            padding: 32px 24px;
+        }
+
+        main .title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        /* CARDS - Smaller size */
+        .wrapper-card {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--surface);
+            padding: 14px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            position: relative;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .card .status {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-grow: 1;
+        }
+
+        .icon-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .total-orders-icon {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .omzet-icon {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .transaction-count-icon {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .info h3 {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .info h1 {
+            font-size: 24px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .more-btn {
+            align-self: flex-end;
+            padding: 6px 12px;
+            background-color: var(--surface-hover);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            margin-top: 6px;
+        }
+
+        .more-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* TABLE */
+        .orders {
+            margin-top: 32px;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .orders .header {
+            margin-bottom: 20px;
+        }
+
+        .orders .header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .styled-table th {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+            background-color: var(--surface-hover);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .styled-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 14px;
+        }
+
+        .styled-table tr:hover {
+            background-color: var(--surface-hover);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .status.completed {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .status.pending {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .edit-btn {
+            padding: 4px 8px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .wrapper-card {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            
+            #content {
+                width: 100%;
+                left: 0;
+            }
+            
+            .wrapper-card {
+                grid-template-columns: 1fr;
+            }
+            
+            main {
+                padding: 20px 16px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .wrapper-card {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .card {
+                padding: 14px;
+                min-height: 90px;
+            }
+            
+            .info h1 {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -38,18 +400,16 @@
     <section id="sidebar">
         <div>
             <a href="index.html" class="brand">
-                <img src="images/logo.svg" alt="Logo" style="height: 30px; margin-right: 10px;">
+                <img src="images/logo.svg" alt="Logo" style="height: 24px; margin-right: 8px;">
                 E-Admin
             </a>
             <ul class="side-menu">
                 <li><a href="index.html" class="active"><i class='bx bxs-dashboard icon'></i> Dashboard</a></li>
-                <li>
-                    <a href="orders.html"><i class='bx bxs-inbox icon'></i> Pesanan</a>
-                </li>
+                <li><a href="orders.html"><i class='bx bxs-inbox icon'></i> Pesanan</a></li>
                 <li><a href="products.html"><i class='bx bxs-chart icon'></i> Produk</a></li>
-                <li class="divider"></li>
             </ul>
         </div>
+        
         <!-- Logout Button -->
         <ul class="side-menu">
             <li>
@@ -68,45 +428,43 @@
 
             <!-- Analyses Section -->
             <div class="wrapper-card">
-                <div class="analyse">
-                    <div class="card total-orders">
-                        <div class="status">
-                            <div class="icon-box total-orders-icon">
-                                <span class="material-icons-sharp">shopping_cart</span>
-                            </div>
-                            <div class="info">
-                                <h3>Pesanan Selesai</h3>
-                                <h1 id="totalOrder">0</h1>
-                            </div>
+                <div class="card">
+                    <div class="status">
+                        <div class="icon-box total-orders-icon">
+                            <span class="material-icons-sharp">shopping_cart</span>
                         </div>
-                        <button onclick="downloadReport('totalOrders')" class="more-btn">More</button>
+                        <div class="info">
+                            <h3>Pesanan Selesai</h3>
+                            <h1 id="totalOrder">0</h1>
+                        </div>
                     </div>
+                    <button onclick="downloadReport('totalOrders')" class="more-btn">Detail</button>
+                </div>
 
-                    <div class="card omzet">
-                        <div class="status">
-                            <div class="icon-box omzet-icon">
-                                <span class="material-icons-sharp">check_circle</span>
-                            </div>
-                            <div class="info">
-                                <h3>Pemesanan Tervalidasi</h3>
-                                <h1>Rp 0</h1>
-                            </div>
+                <div class="card">
+                    <div class="status">
+                        <div class="icon-box omzet-icon">
+                            <span class="material-icons-sharp">check_circle</span>
                         </div>
-                        <button onclick="downloadReport('omzet')" class="more-btn">More</button>
+                        <div class="info">
+                            <h3>Pemesanan Tervalidasi</h3>
+                            <h1>Rp 0</h1>
+                        </div>
                     </div>
+                    <button onclick="downloadReport('omzet')" class="more-btn">Detail</button>
+                </div>
 
-                    <div class="card transaction-count">
-                        <div class="status">
-                            <div class="icon-box transaction-count-icon">
-                                <span class="material-icons-sharp">shopping_bag</span>
-                            </div>
-                            <div class="info">
-                                <h3>Produk Terjual</h3>
-                                <h1>0</h1>
-                            </div>
+                <div class="card">
+                    <div class="status">
+                        <div class="icon-box transaction-count-icon">
+                            <span class="material-icons-sharp">shopping_bag</span>
                         </div>
-                        <button onclick="downloadReport('transactionCount')" class="more-btn">More</button>
+                        <div class="info">
+                            <h3>Produk Terjual</h3>
+                            <h1>0</h1>
+                        </div>
                     </div>
+                    <button onclick="downloadReport('transactionCount')" class="more-btn">Detail</button>
                 </div>
             </div>
             <!-- End of Analyses Section -->
@@ -128,11 +486,35 @@
                             <th>Status Pembayaran</th>
                             <th>Status Validasi</th>
                             <th>Status Pemesanan</th>
-                            <th class="actions">Aksi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="ordersTableBody">
                         <!-- Data pesanan akan diisi secara dinamis -->
+                        <tr>
+                            <td>1</td>
+                            <td>John Doe</td>
+                            <td>Hampers Lebaran</td>
+                            <td>2</td>
+                            <td>Rp 150.000</td>
+                            <td>2024-06-15</td>
+                            <td><span class="status completed">Sudah Bayar</span></td>
+                            <td><span class="status completed">Valid</span></td>
+                            <td><span class="status pending">Belum Dikirim</span></td>
+                            <td><a href="#" class="edit-btn">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Jane Smith</td>
+                            <td>Gift Box Premium</td>
+                            <td>1</td>
+                            <td>Rp 200.000</td>
+                            <td>2024-06-14</td>
+                            <td><span class="status pending">Belum Bayar</span></td>
+                            <td><span class="status pending">Invalid</span></td>
+                            <td><span class="status pending">Belum Dikirim</span></td>
+                            <td><a href="#" class="edit-btn">Edit</a></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -141,7 +523,6 @@
         </main>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         // Function to fetch orders from backend
         function fetchOrders() {
@@ -164,50 +545,64 @@
                         <td>${order.customer_name}</td>
                         <td>${order.product_name}</td>
                         <td>${order.jumlah}</td>
-                        <td>Rp ${parseFloat(order.total_harga).toFixed(3)}</td>
+                        <td>Rp ${parseFloat(order.total_harga).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
                         <td>${order.tanggal_order}</td>
                         <td><span class="status ${order.status_pembayaran === 'completed' ? 'completed' : 'pending'}">${order.status_pembayaran === 'completed' ? 'Sudah Bayar' : 'Belum Bayar'}</span></td>
                         <td><span class="status ${order.status_validasi === 'completed' ? 'completed' : 'pending'}">${order.status_validasi === 'completed' ? 'Valid' : 'Invalid'}</span></td>
                         <td><span class="status ${order.status_pemesanan === 'completed' ? 'completed' : 'pending'}">${order.status_pemesanan === 'completed' ? 'Dikirim' : 'Belum Dikirim'}</span></td>
-                        <td class="actions"><a href="#" class="edit-btn">Edit</a></td>
+                        <td><a href="#" class="edit-btn">Edit</a></td>
                     `;
                 });
+                updateDashboardStats();
             })
-            .catch(error => console.error('Error fetching orders:', error));
+            .catch(error => {
+                console.error('Error fetching orders:', error);
+                // Keep sample data if fetch fails
+            });
+        }
+
+        function updateDashboardStats() {
+            const rows = document.querySelectorAll('.recent-orders tbody tr');
+            let totalOrders = 0;
+            let validatedOrders = 0;
+            let totalRevenue = 0;
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length > 0) {
+                    // Count completed orders
+                    const orderStatus = cells[8].querySelector('.status');
+                    if (orderStatus && orderStatus.classList.contains('completed')) {
+                        totalOrders++;
+                    }
+
+                    // Count validated orders and calculate revenue
+                    const validationStatus = cells[7].querySelector('.status');
+                    if (validationStatus && validationStatus.classList.contains('completed')) {
+                        validatedOrders++;
+                        // Extract price from cell
+                        const priceText = cells[4].textContent.replace(/[^\d]/g, '');
+                        totalRevenue += parseInt(priceText) || 0;
+                    }
+                }
+            });
+
+            document.getElementById('totalOrder').textContent = totalOrders;
+            document.querySelector('.omzet .info h1').textContent = `Rp ${totalRevenue.toLocaleString('id-ID')}`;
+            document.querySelector('.transaction-count .info h1').textContent = totalOrders;
+        }
+
+        function downloadReport(type) {
+            console.log(`Downloading ${type} report...`);
+            // Implement report download functionality
         }
 
         // Call fetchOrders on page load
-        document.addEventListener('DOMContentLoaded', fetchOrders);
-
-        function updateTotalOrders() {
-            const rows = document.querySelectorAll('.recent-orders tbody tr');
-            let totalOrders = 0;
-
-            rows.forEach(row => {
-                if (row.dataset.status === 'completed') {
-                    totalOrders++;
-                }
-            });
-
-            document.getElementById('totalOrder').innerText = totalOrders;
-        }
-
-        function updateValidatedOrders() {
-            const rows = document.querySelectorAll('.recent-orders tbody tr');
-            let validatedOrders = 0;
-
-            rows.forEach(row => {
-                const validationStatus = row.querySelector('td:nth-child(7) span').innerText;
-                if (validationStatus === 'Valid') {
-                    validatedOrders++;
-                }
-            });
-
-            document.getElementById('validatedOrderCount').innerText = validatedOrders;
-        }
-
-        updateTotalOrders();
-        updateValidatedOrders();
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchOrders();
+            // Update stats with sample data if fetch fails
+            setTimeout(updateDashboardStats, 100);
+        });
     </script>
 </body>
 </html>
